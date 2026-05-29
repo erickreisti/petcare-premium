@@ -1,26 +1,104 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Mapeamento das fontes */
+  --font-work: var(--font-work);
+  --font-ubuntu: var(--font-ubuntu);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Colors - Design System */
+  --color-pet-teal: #0A3641;
+  --color-pet-teal-light: #135565;
+  --color-pet-orange: #FC7C4B;
+  --color-pet-orange-hover: #FD6E4C;
+  --color-pet-navy: #0B192C;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Sombras Premium / Soft Shadows */
+  --shadow-premium: 0 10px 40px -10px rgba(10, 54, 65, 0.1);
+  --shadow-orange-glow: 0 10px 25px -5px rgba(252, 124, 75, 0.4);
+  --shadow-teal-glow: 0 10px 25px -5px rgba(10, 54, 65, 0.4);
+
+  /* Animações customizadas */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-fade-in-up: fadeInUp 0.6s ease-out forwards;
+  --animate-fade-in-left: fadeInLeft 1s ease-out forwards;
+  --animate-fade-in-right: fadeInRight 1s ease-out forwards;
+
+  /* Keyframes */
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeInLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes fadeInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Glassmorphism Utilities */
+@utility glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+@utility glass-dark {
+  background: rgba(11, 25, 44, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Scrollbar Personalizada (Mantida no CSS) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #fc7c4b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #fd6e4c;
+}
+
+/* Foco global de acessibilidade */
+@layer base {
+  button:focus-visible,
+  a:focus-visible {
+    @apply outline-2 outline-[#fc7c4b] outline-offset-2;
+  }
 }
