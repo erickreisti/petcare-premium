@@ -1,3 +1,6 @@
+"use client";
+import { motion } from "framer-motion";
+
 export default function Prices() {
   const plans = [
     {
@@ -62,8 +65,12 @@ export default function Prices() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
-            <div
+            <motion.div
               key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
               className={`relative rounded-3xl p-8 ${plan.popular ? "bg-white border-2 border-pet-orange shadow-orange-glow scale-105" : "glass border border-white shadow-premium"} transition-all duration-500 hover:-translate-y-2 hover:shadow-orange-glow z-10 group`}
             >
               {plan.popular && (
@@ -108,7 +115,7 @@ export default function Prices() {
               >
                 Escolher Plano
               </button>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

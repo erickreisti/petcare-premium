@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  /* Mapeamento das fontes */
-  --font-work: var(--font-work);
-  --font-ubuntu: var(--font-ubuntu);
+  /* Mapeamento das fontes (mantendo os nomes das classes para compatibilidade) */
+  --font-work: var(--font-nunito);
+  --font-ubuntu: var(--font-fredoka);
 
   /* Colors - Design System */
   --color-pet-teal: #0A3641;

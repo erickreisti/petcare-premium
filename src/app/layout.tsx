@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Work_Sans, Ubuntu } from "next/font/google";
+import { Nunito, Fredoka } from "next/font/google";
 import "./globals.css";
 
-const workSans = Work_Sans({
+const nunito = Nunito({
   subsets: ["latin"],
-  variable: "--font-work",
+  variable: "--font-nunito",
 });
 
-const ubuntu = Ubuntu({
+const fredoka = Fredoka({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-ubuntu",
+  variable: "--font-fredoka",
 });
 
 export const metadata: Metadata = {
@@ -37,7 +36,7 @@ export default function RootLayout({
       className="scroll-smooth scroll-pt-17.5 md:scroll-pt-20"
     >
       <body
-        className={`${workSans.variable} ${ubuntu.variable} font-work text-[#333] leading-relaxed overflow-x-hidden antialiased selection:bg-pet-orange selection:text-white`}
+        className={`${nunito.variable} ${fredoka.variable} font-work text-[#333] leading-relaxed overflow-x-hidden antialiased selection:bg-pet-orange selection:text-white`}
       >
         {children}
       </body>

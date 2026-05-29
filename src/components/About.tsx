@@ -1,4 +1,6 @@
+"use client";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function About() {
   const timelineItems = [
@@ -28,7 +30,13 @@ export default function About() {
     <section id="about" className="py-20 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <div className="space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="space-y-8"
+          >
             <div>
               <span className="text-pet-teal font-bold uppercase tracking-wider text-sm flex items-center gap-2">
                 <span className="w-8 h-0.5 bg-pet-teal rounded-full"></span>
@@ -64,8 +72,14 @@ export default function About() {
                 </div>
               ))}
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+          </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="grid grid-cols-2 gap-4"
+          >
             <div className="space-y-4">
               <div className="aspect-square relative rounded-3xl overflow-hidden shadow-premium group">
                 <Image src="/images/happy_dog_vet.png" alt="Cachorro feliz sendo examinado" fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -86,7 +100,7 @@ export default function About() {
                 <div className="absolute inset-0 bg-linear-to-t from-pet-navy/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

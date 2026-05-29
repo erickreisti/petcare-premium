@@ -1,38 +1,24 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
-export default function Home() {
+export default function Hero() {
   return (
     <section
       id="home"
-      className="min-h-screen w-full relative flex items-center justify-center overflow-hidden bg-linear-to-br from-[#FAF7F2] via-white to-[#FFF5E6]"
+      className="min-h-screen w-full relative flex items-center justify-center bg-linear-to-b from-[#FAF7F2] to-white"
     >
-      {/* Bolhas Decorativas Animadas (aria-hidden remove do leitor de tela) */}
-      <div
-        className="absolute inset-0 overflow-hidden pointer-events-none"
-        aria-hidden="true"
-      >
-        <div className="absolute top-1/4 -left-20 w-64 md:w-96 h-64 md:h-96 bg-pet-orange/10 rounded-full blur-3xl animate-float"></div>
-        <div
-          className="absolute bottom-1/3 -right-16 w-48 md:w-64 h-48 md:h-64 bg-yellow-400/10 rounded-full blur-2xl animate-float"
-          style={{ animationDelay: "2s" }}
-        ></div>
-        <div
-          className="absolute top-20 right-1/4 w-16 md:w-32 h-16 md:h-32 bg-pet-orange-hover/5 rounded-full blur-xl animate-float"
-          style={{ animationDelay: "1s" }}
-        ></div>
-        <div
-          className="absolute bottom-20 left-1/3 w-16 md:w-24 h-16 md:h-24 bg-orange-300/10 rounded-full blur-lg animate-float"
-          style={{ animationDelay: "3s" }}
-        ></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')] opacity-40"></div>
-      </div>
-
       {/* Conteúdo Principal */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 w-full mt-12 lg:mt-0">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Texto */}
-          <div className="space-y-8 animate-fade-in-up">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="space-y-8"
+          >
             <div>
               <span className="inline-block glass text-pet-teal px-5 py-2 rounded-full text-sm font-bold tracking-wide mb-6 shadow-sm border border-pet-teal/10">
                 🐾 Centro Veterinário de Excelência
@@ -113,65 +99,42 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Imagem do Pet e Decorações */}
-          <div className="relative mt-10 lg:mt-0">
-            <div className="relative z-10 flex justify-center">
-              <Image
-                src="/images/dog.png"
-                alt="Cachorro Feliz deitado de barriga para cima - Mascote Petcare"
-                width={700}
-                height={700}
-                priority
-                className="w-full max-w-125 lg:max-w-2xl transform hover:scale-105 transition-transform duration-700 object-contain drop-shadow-2xl"
-              />
+          {/* Imagem do Pet */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            className="relative mt-10 lg:mt-0 flex justify-center"
+          >
+            <div className="relative z-10 w-full max-w-lg aspect-square">
+              {/* O nome da imagem será atualizado assim que a IA gerar */}
+              <div className="w-full h-full rounded-full bg-white shadow-premium overflow-hidden border-8 border-white">
+                <Image
+                  src="/images/premium_dog_hero.png"
+                  alt="Cachorro Feliz de alta qualidade"
+                  fill
+                  priority
+                  className="object-cover transform hover:scale-105 transition-transform duration-700"
+                />
+              </div>
             </div>
-
-            {/* Elementos Decorativos (aria-hidden) */}
-            <div aria-hidden="true">
-              <div className="absolute top-10 -left-6 md:-top-6 md:-left-6 w-20 md:w-24 h-20 md:h-24 bg-pet-orange/20 rounded-full blur-xl animate-pulse"></div>
-              <div className="absolute -bottom-8 right-0 md:-right-8 w-28 md:w-32 h-28 md:h-32 bg-yellow-400/20 rounded-full blur-2xl"></div>
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 md:w-80 h-64 md:h-80 bg-pet-orange/10 rounded-full blur-3xl -z-10"></div>
-            </div>
-
-            {/* Card flutuante */}
-            <div className="absolute z-20 -bottom-6 right-4 md:bottom-10 md:-right-4 bg-white/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-gray-100 animate-float">
+            
+            {/* Elemento flutuante simplificado */}
+            <div className="absolute z-20 bottom-10 -left-6 bg-white rounded-2xl p-4 shadow-xl border border-gray-100 animate-float">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 text-xl" aria-hidden="true">
-                    ★
-                  </span>
+                <div className="w-12 h-12 bg-pet-teal/10 rounded-full flex items-center justify-center text-pet-teal font-bold text-xl">
+                  ✓
                 </div>
                 <div>
-                  <div className="font-bold text-gray-800 text-sm md:text-base">
-                    Excelente
-                  </div>
-                  <div className="text-xs md:text-sm text-gray-500 font-medium">
-                    4.9/5 - 500+ avaliações
-                  </div>
+                  <div className="font-bold text-gray-800">Alta Qualidade</div>
+                  <div className="text-sm text-gray-500">Cuidado Premium</div>
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div
-        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10 hidden lg:block animate-fade-in-up"
-        style={{ animationDelay: "0.5s" }}
-      >
-        <Link href="#services" aria-label="Rolar para a seção de serviços">
-          <div className="flex flex-col items-center gap-3 opacity-60 hover:opacity-100 transition-opacity duration-300">
-            <span className="text-gray-500 text-xs font-bold uppercase tracking-widest">
-              Descubra
-            </span>
-            <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center p-1">
-              <div className="w-1.5 h-2.5 bg-pet-orange rounded-full animate-bounce"></div>
-            </div>
-          </div>
-        </Link>
       </div>
     </section>
   );
