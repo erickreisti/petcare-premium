@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import Bubbles from "./Bubbles";
 import ThreeBubble from "./ThreeBubble";
 
 gsap.registerPlugin(useGSAP);
@@ -51,22 +50,70 @@ export default function Hero() {
       ref={container}
       className="min-h-screen w-full relative flex flex-col items-center justify-center bg-pet-bg overflow-hidden pt-20"
     >
-      {/* Componente de Bolhas no Background */}
-      <Bubbles />
 
       {/* Redes Sociais - Vidro Embaçado (Flutuante na Esquerda) */}
       <div className="hidden xl:flex flex-col gap-4 absolute left-8 top-1/2 -translate-y-1/2 z-40 bg-white/30 backdrop-blur-2xl border-2 border-white/60 p-3 rounded-full shadow-[inset_0_0_20px_rgba(255,255,255,0.9),0_15px_30px_rgba(53,126,151,0.15)] opacity-90 hover:opacity-100 transition-opacity duration-300">
         {/* Instagram */}
-        <a href="#" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50" aria-label="Instagram">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+        <a
+          href="#"
+          className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50"
+          aria-label="Instagram"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+          </svg>
         </a>
         {/* Facebook */}
-        <a href="#" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50" aria-label="Facebook">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        <a
+          href="#"
+          className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50"
+          aria-label="Facebook"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+          </svg>
         </a>
         {/* TikTok */}
-        <a href="#" className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50" aria-label="TikTok">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+        <a
+          href="#"
+          className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50"
+          aria-label="TikTok"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+          </svg>
         </a>
       </div>
 
@@ -77,7 +124,6 @@ export default function Hero() {
           {/* Texto */}
           <div className="hero-text space-y-8 pointer-events-auto">
             <div>
-
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-pet-navy font-ubuntu">
                 Cuidados para a
                 <span className="text-pet-teal-dark relative inline-block mx-3">
@@ -118,7 +164,7 @@ export default function Hero() {
                   Agendar Banho
                 </span>
               </button>
-              
+
               <Link
                 href="#services"
                 className="group glass hover:glass-dark text-pet-navy hover:text-white font-bold text-lg py-4 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-pet-navy/10 hover:border-white/20"
@@ -160,7 +206,9 @@ export default function Hero() {
                   <clipPath id="blob-clip">
                     <path
                       transform="translate(100 100)"
-                      style={{ animation: "morphBubbleShape 20s linear infinite" }}
+                      style={{
+                        animation: "morphBubbleShape 20s linear infinite",
+                      }}
                       d="M46.5,-54.1C60.2,-44,71.1,-29.2,75.4,-12.2C79.7,4.9,77.5,24.2,68.7,39.9C59.9,55.6,44.5,67.7,27.1,73.8C9.7,79.8,-9.7,79.8,-25.8,73C-42,66.2,-54.9,52.7,-64.8,36.8C-74.8,20.9,-81.8,2.6,-80,-15.3C-78.2,-33.1,-67.6,-50.6,-52.8,-60.5C-38,-70.5,-19,-73,-1.3,-71.5C16.4,-69.9,32.9,-64.3,46.5,-54.1Z"
                     />
                   </clipPath>
@@ -185,16 +233,26 @@ export default function Hero() {
                     width="180"
                     height="180"
                     preserveAspectRatio="xMidYMid slice"
-                    style={{ transformOrigin: "center", transition: "transform 0.7s" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                    style={{
+                      transformOrigin: "center",
+                      transition: "transform 0.7s",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.transform = "scale(1.05)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.transform = "scale(1)")
+                    }
                   />
                 </g>
 
                 {/* Camada Principal da Bolha (Vidro de Sabão Transparente) */}
                 <path
                   transform="translate(100 100)"
-                  style={{ animation: "morphBubbleShape 20s linear infinite", pointerEvents: "none" }}
+                  style={{
+                    animation: "morphBubbleShape 20s linear infinite",
+                    pointerEvents: "none",
+                  }}
                   fill="url(#soapGlassGrad)"
                   stroke="rgba(255, 255, 255, 0.8)"
                   strokeWidth="1.5"
@@ -203,7 +261,10 @@ export default function Hero() {
                 {/* Camada de Brilho Translúcido */}
                 <path
                   transform="translate(100 100)"
-                  style={{ animation: "morphBubbleShape 20s linear infinite", pointerEvents: "none" }}
+                  style={{
+                    animation: "morphBubbleShape 20s linear infinite",
+                    pointerEvents: "none",
+                  }}
                   fill="rgba(255,255,255,0.05)"
                 />
               </svg>
@@ -218,7 +279,6 @@ export default function Hero() {
                 <div className="w-0.5 h-8 bg-white blur-[1px] transform rotate-45 absolute"></div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -227,16 +287,36 @@ export default function Hero() {
       <div className="w-full bg-white/95 backdrop-blur-md py-6 mt-12 border-y border-pet-teal/10 relative z-20 shadow-[0_10px_30px_rgba(53,126,151,0.05)]">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-6">
           <div className="flex -space-x-4">
-            <img src="https://i.pravatar.cc/100?img=47" className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover" alt="Perfil" />
-            <img src="https://i.pravatar.cc/100?img=44" className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover" alt="Perfil" />
-            <img src="https://i.pravatar.cc/100?img=33" className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover" alt="Perfil" />
-            <img src="https://i.pravatar.cc/100?img=22" className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover" alt="Perfil" />
+            <img
+              src="https://i.pravatar.cc/100?img=47"
+              className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover"
+              alt="Perfil"
+            />
+            <img
+              src="https://i.pravatar.cc/100?img=44"
+              className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover"
+              alt="Perfil"
+            />
+            <img
+              src="https://i.pravatar.cc/100?img=33"
+              className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover"
+              alt="Perfil"
+            />
+            <img
+              src="https://i.pravatar.cc/100?img=22"
+              className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover"
+              alt="Perfil"
+            />
             <div className="w-12 h-12 rounded-full border-2 border-white shadow-md bg-pet-teal-dark flex items-center justify-center text-white font-bold text-sm">
               +2k
             </div>
           </div>
           <div className="text-pet-navy font-medium text-lg text-center md:text-left">
-            Junte-se a <span className="text-pet-teal-dark font-bold">milhares de pais de pets</span> apaixonados pelos nossos cuidados! 🐶💙
+            Junte-se a{" "}
+            <span className="text-pet-teal-dark font-bold">
+              milhares de pais de pets
+            </span>{" "}
+            apaixonados pelos nossos cuidados!
           </div>
         </div>
       </div>

@@ -1,298 +1,254 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Bathtub from "./Bathtub";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export default function Footer() {
   const container = useRef<HTMLElement>(null);
-  const [isWaterRunning, setIsWaterRunning] = useState(true);
 
   const currentYear = new Date().getFullYear();
 
   useGSAP(() => {
-    // Animação da espuma respirando
-    gsap.to(".foam-wave", {
-      y: -15,
-      duration: 3,
-      yoyo: true,
-      repeat: -1,
-      ease: "sine.inOut",
-      stagger: 0.4
+    // Reveal text links staggering
+    gsap.from(".footer-link", {
+      y: 20,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top 85%"
+      }
     });
 
-    // Animação da água caindo (dashoffset)
-    const waterAnim = gsap.to(".water-stream", {
-      strokeDashoffset: -40,
+    gsap.from(".footer-social", {
+      scale: 0.5,
+      opacity: 0,
       duration: 0.5,
-      repeat: -1,
-      ease: "none",
-      paused: !isWaterRunning
+      stagger: 0.1,
+      ease: "back.out(1.5)",
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top 90%"
+      }
     });
+  }, { scope: container });
 
-    // Emissor de bolhas contínuo vindo da banheira
-    let bubbleInterval: NodeJS.Timeout | null = null;
-    
-    if (isWaterRunning) {
-      waterAnim.play();
-      bubbleInterval = setInterval(() => {
-        const tub = document.querySelector(".bathtub-container");
-        if(!tub) return;
-        
-        const bubble = document.createElement("div");
-        bubble.className = "absolute rounded-full border border-white/60 shadow-sm backdrop-blur-sm z-0 pointer-events-none";
-        bubble.style.width = `${Math.random() * 25 + 10}px`;
-        bubble.style.height = bubble.style.width;
-        bubble.style.background = "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(57, 157, 157, 0.2) 100%)";
-        
-        tub.appendChild(bubble);
-        
-        // Nasce perto da água
-        gsap.set(bubble, {
-          x: "random(40, 60)%", // no meio da banheira
-          y: "80%", // da base da espuma
-          opacity: 0.8,
-          scale: 0.5
-        });
-        
-        gsap.to(bubble, {
-          y: -400,
-          x: "+=random(-100, 100)",
-          opacity: 0,
-          scale: 1.5,
-          duration: "random(3, 6)",
-          ease: "power1.out",
-          onComplete: () => bubble.remove()
-        });
-      }, 400);
-    } else {
-      waterAnim.pause();
-    }
-
-    return () => {
-      if(bubbleInterval) clearInterval(bubbleInterval);
-    };
-  }, [isWaterRunning]);
-
-  type FooterLink = { name: string; href: string; icon?: string };
-  const footerSections: { title: string; links: FooterLink[] }[] = [
-    {
-      title: "Nossos Serviços",
-      links: [
-        { name: "Banho & Tosa", href: "#services" },
-        { name: "Consultas Veterinárias", href: "#services" },
-        { name: "Vacinação", href: "#services" },
-        { name: "Creche Pet", href: "#services" },
-      ],
-    },
-    {
-      title: "Sobre Nós",
-      links: [
-        { name: "Nossa História", href: "#about" },
-        { name: "Equipe", href: "#about" },
-        { name: "Instalações", href: "#about" },
-        { name: "Trabalhe Conosco", href: "#about" },
-      ],
-    },
-    {
-      title: "Planos",
-      links: [
-        { name: "Plano Básico", href: "#prices" },
-        { name: "Plano Completo", href: "#prices" },
-        { name: "Plano Premium", href: "#prices" },
-      ],
-    },
-    {
-      title: "Contato",
-      links: [
-        { name: "Rua dos Animais, 123", href: "#", icon: "📍" },
-        { name: "(11) 9999-9999", href: "tel:+551199999999", icon: "📞" },
-        {
-          name: "contato@petcare.com",
-          href: "mailto:contato@petcare.com",
-          icon: "📧",
-        },
-      ],
-    },
+  type NavLink = { name: string; href: string };
+  const navLinks: NavLink[] = [
+    { name: "Início", href: "#" },
+    { name: "Serviços", href: "#services" },
+    { name: "Sobre Nós", href: "#about" },
+    { name: "Planos & Preços", href: "#prices" },
+    { name: "Depoimentos", href: "#testimonials" }
   ];
 
-  const socialLinks = [
-    { name: "Instagram", icon: "📸", href: "https://instagram.com/petcare" },
-    { name: "Facebook", icon: "👥", href: "https://facebook.com/petcare" },
-    { name: "WhatsApp", icon: "💬", href: "https://wa.me/5511999999999" },
+  const contactLinks = [
+    { name: "(11) 99999-9999", href: "tel:+5511999999999" },
+    { name: "contato@petcare.com", href: "mailto:contato@petcare.com" },
+    { name: "Rua dos Pets, 123 - SP", href: "#" }
   ];
 
   return (
     <footer ref={container} className="bg-pet-navy text-white relative overflow-hidden">
       
-      {/* Cena da Banheira (Topo do Footer) */}
-      <div className="bathtub-container relative w-full h-48 md:h-64 bg-pet-bg flex items-end justify-center overflow-visible z-20">
-        
-        {/* Torneira */}
-        <div 
-          className="absolute bottom-20 left-1/2 transform -translate-x-32 md:-translate-x-40 cursor-pointer group z-30"
-          onClick={() => setIsWaterRunning(!isWaterRunning)}
-          title="Clique para ligar/desligar a água"
-        >
-          {/* Tubo da torneira */}
-          <div className="w-8 h-16 border-t-8 border-l-8 border-gray-400 rounded-tl-xl relative">
-             {/* Água caindo */}
-             <svg className="absolute top-16 left-4 w-6 h-32 md:h-48 overflow-visible" viewBox="0 0 20 100" preserveAspectRatio="none">
-               <line 
-                 x1="10" y1="0" x2="10" y2="100" 
-                 stroke="#399d9d" strokeWidth="8" strokeLinecap="round"
-                 className={`water-stream ${isWaterRunning ? 'opacity-80' : 'opacity-0'} transition-opacity duration-300`}
-                 strokeDasharray="10 10"
-               />
-             </svg>
-             {/* Registro */}
-             <div className={`absolute -top-4 -left-4 w-6 h-6 bg-pet-orange rounded-full shadow-md transform transition-transform duration-300 ${isWaterRunning ? 'rotate-0' : 'rotate-90'}`}></div>
-          </div>
-          <div className="absolute -top-10 left-0 bg-white text-pet-navy text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-            {isWaterRunning ? "Desligar Água" : "Ligar Água"}
-          </div>
-        </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes float-up {
+          0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0; }
+          10% { opacity: 0.6; }
+          90% { opacity: 0.6; }
+          100% { transform: translateY(-1000px) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+      `}} />
 
-        {/* Banheira SVG */}
-        <div className="relative w-72 md:w-96 h-32 md:h-40 z-20">
-          <svg viewBox="0 0 200 100" className="w-full h-full drop-shadow-2xl">
-            {/* Pés da banheira */}
-            <path d="M 30 80 Q 20 100 10 95" stroke="#d1d5db" strokeWidth="6" fill="none" strokeLinecap="round"/>
-            <path d="M 170 80 Q 180 100 190 95" stroke="#d1d5db" strokeWidth="6" fill="none" strokeLinecap="round"/>
-            {/* Corpo da banheira */}
-            <path d="M 10 20 L 190 20 Q 200 80 170 85 L 30 85 Q 0 80 10 20 Z" fill="#ffffff" />
-            <path d="M 15 25 L 185 25 Q 190 75 165 80 L 35 80 Q 10 75 15 25 Z" fill="#F4FAFA" />
-            <rect x="5" y="15" width="190" height="8" rx="4" fill="#e5e7eb" />
-          </svg>
-          
-          {/* Easter Egg Cachorrinho */}
-          <div className="absolute top-0 right-10 w-16 h-16 transform translate-y-4 z-10 animate-bounce" style={{ animationDuration: '3s' }}>
-             <div className="w-full h-full bg-white rounded-full relative shadow-sm border-2 border-gray-100">
-                {/* Orelhas */}
-                <div className="absolute -top-2 -left-2 w-6 h-8 bg-pet-orange rounded-full transform -rotate-12"></div>
-                <div className="absolute -top-2 -right-2 w-6 h-8 bg-pet-orange rounded-full transform rotate-12"></div>
-                {/* Olhos e focinho */}
-                <div className="absolute top-6 left-3 w-2 h-2 bg-pet-navy rounded-full"></div>
-                <div className="absolute top-6 right-3 w-2 h-2 bg-pet-navy rounded-full"></div>
-                <div className="absolute top-9 left-1/2 transform -translate-x-1/2 w-4 h-3 bg-gray-800 rounded-full"></div>
-             </div>
-          </div>
-        </div>
-
-        {/* Espuma SVG na frente */}
-        <div className="absolute bottom-16 md:bottom-24 left-1/2 transform -translate-x-1/2 w-80 md:w-110 h-20 z-30 flex items-center justify-center pointer-events-none">
-          <svg viewBox="0 0 300 80" className="w-full h-full opacity-90 fill-white drop-shadow-md">
-            <circle cx="50" cy="50" r="30" className="foam-wave" />
-            <circle cx="90" cy="30" r="35" className="foam-wave" />
-            <circle cx="140" cy="50" r="40" className="foam-wave" />
-            <circle cx="190" cy="35" r="38" className="foam-wave" />
-            <circle cx="240" cy="55" r="28" className="foam-wave" />
-          </svg>
-        </div>
-      </div>
-
-      {/* Onda de Transição para o Footer Escuro */}
-      <svg className="w-full h-12 md:h-16 text-pet-navy fill-current bg-pet-bg transform rotate-180" viewBox="0 0 1200 120" preserveAspectRatio="none">
-        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C54.71,76.51,126.11,54.52,192.31,50.15,236.4,47.25,280.4,50.31,321.39,56.44Z"></path>
+      {/* 
+        ========================================================
+        EFEITO LIQUID DISPLACEMENT (Filtro SVG Nativo)
+        Substitui o WebGL/PixiJS por uma solução super leve!
+        ========================================================
+      */}
+      <svg className="absolute w-0 h-0">
+        <filter id="liquid" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise">
+            {/* Anima o ruído criando a ilusão de água fluindo */}
+            <animate attributeName="baseFrequency" values="0.015;0.025;0.015" dur="15s" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="40" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
       </svg>
 
-      {/* Conteúdo do Footer */}
-      <div className="max-w-7xl mx-auto px-6 relative z-10 pt-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-pet-orange rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg">🐾</span>
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold font-ubuntu">Petcare</h3>
-                <p className="text-gray-400 text-sm">
-                  Centro Veterinário Integral
-                </p>
-              </div>
-            </div>
-            <p className="text-gray-400 mb-6 leading-relaxed">
-              Cuidamos do seu pet com amor e profissionalismo há mais de 10
-              anos. Oferecemos serviços veterinários completos, estética animal
-              e hospedagem.
-            </p>
-            <div className="flex space-x-4">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  className="w-12 h-12 glass-dark hover:bg-pet-orange rounded-full flex items-center justify-center transition-all duration-300 transform hover:-translate-y-1 hover:shadow-orange-glow"
-                  aria-label={social.name}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div 
+          className="absolute inset-0 w-full h-full opacity-70 mix-blend-screen"
+          style={{
+            // Um fundo construído apenas com CSS:
+            // 1. Linhas diagonais repetitivas (para o displacement "dobrar" e criar as ondas)
+            // 2. Um brilho Teal no canto inferior esquerdo
+            // 3. Fundo base azul marinho
+            background: `
+              repeating-linear-gradient(45deg, rgba(57, 157, 157, 0.15) 0px, rgba(57, 157, 157, 0.15) 2px, transparent 2px, transparent 16px),
+              radial-gradient(circle at 20% 80%, rgba(57, 157, 157, 0.4) 0%, transparent 60%),
+              radial-gradient(circle at 80% 20%, rgba(255, 159, 67, 0.1) 0%, transparent 50%),
+              #1f2b45
+            `,
+            filter: 'url(#liquid)',
+            transform: 'scale(1.2)' // Escala para esconder as bordas puxadas pelo displacement
+          }}
+        />
+        {/* Overlay para escurecer o fundo liquid e manter o contraste */}
+        <div className="absolute inset-0 bg-pet-navy/60 backdrop-blur-[2px]" />
+      </div>
+
+      {/* Bolhas flutuantes subindo pela piscina (Pseudo-aleatórias para evitar Hydration Error) */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full border border-white/20 bg-white/5 backdrop-blur-xs"
+            style={{
+              left: `${(i * 27) % 100}%`,
+              bottom: `-50px`,
+              width: `${(i * 11) % 40 + 10}px`,
+              height: `${(i * 11) % 40 + 10}px`,
+              animation: `float-up ${(i * 5) % 15 + 10}s linear infinite`,
+              animationDelay: `${(i * 2.3) % 10}s`
+            }}
+          />
+        ))}
+      </div>
+
+
+      {/* Conteúdo do Footer (Split Layout Premium) */}
+      <div className="max-w-7xl mx-auto px-6 relative z-10 pt-24 pb-12">
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-start mb-20">
+          
+          {/* Lado Esquerdo - Branding */}
+          <div className="lg:col-span-5 flex flex-col">
+            <div className="flex items-center gap-3 mb-6 footer-link">
+              <div className="w-14 h-14 bg-linear-to-br from-pet-teal to-pet-teal-dark rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(57,157,157,0.4)]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-8 h-8 text-white"
                 >
-                  <span className="text-lg">{social.icon}</span>
+                  <path d="M12 21a9 9 0 0 0 9-9c0-4.97-4.03-9-9-9s-9 4.03-9 9a9 9 0 0 0 9 9Z" />
+                  <path d="M9 13.5c-1.5 0-2.5-1-2.5-2.5S7.5 8.5 9 8.5s2.5 1 2.5 2.5-1 2.5-2.5 2.5Z" />
+                  <path d="M15 13.5c1.5 0 2.5-1 2.5-2.5s-1-2.5-2.5-2.5-2.5 1-2.5 2.5 1 2.5 2.5 2.5Z" />
+                  <path d="M12 16.5c-1.5 0-2.5 1-2.5 2.5S10.5 21 12 21s2.5-1 2.5-2.5-1-2.5-2.5-2.5Z" />
+                </svg>
+              </div>
+              <h2 className="text-4xl font-bold font-ubuntu tracking-tight">Pet<span className="text-pet-teal">Care</span></h2>
+            </div>
+            
+            <p className="text-gray-400 text-lg max-w-sm mb-8 footer-link leading-relaxed">
+              Elevando o padrão de cuidados veterinários. Onde luxo e saúde se encontram para o bem-estar do seu melhor amigo.
+            </p>
+
+            <div className="flex gap-4">
+              {['instagram', 'facebook', 'twitter'].map((social, idx) => (
+                <a key={idx} href="#" className="footer-social w-12 h-12 rounded-full border border-white/20 bg-white/5 flex items-center justify-center hover:bg-pet-orange hover:border-pet-orange transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-orange-glow group">
+                  <svg className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                  </svg>
                 </a>
               ))}
             </div>
           </div>
-          {footerSections.map((section, index) => (
-            <div key={index}>
-              <h4 className="text-lg font-bold mb-6 text-white relative">
-                {section.title}
-                <span className="absolute -bottom-2 left-0 w-8 h-0.5 bg-pet-orange rounded-full"></span>
-              </h4>
-              <ul className="space-y-3">
-                {section.links.map((link, linkIndex) => (
-                  <li key={linkIndex}>
-                    <a
-                      href={link.href}
-                      className="text-gray-400 hover:text-pet-orange transition-colors duration-300 flex items-center gap-2 group"
-                    >
-                      {link.icon && <span>{link.icon}</span>}
-                      <span className="group-hover:translate-x-1 transition-transform duration-300">
+
+
+          {/* Centro - Menu Rápido */}
+          <div className="lg:col-span-3 flex flex-col">
+            <h4 className="text-white font-bold text-xl mb-6 footer-link font-ubuntu">Navegação</h4>
+            <ul className="space-y-4">
+              {navLinks.map((link, idx) => (
+                <li key={idx} className="footer-link">
+                  <a href={link.href} className="group relative text-gray-400 hover:text-white transition-colors duration-300 flex items-center gap-2 w-fit">
+                    <span className="relative overflow-hidden">
+                      {/* Texto Estático */}
+                      <span className="block transition-transform duration-300 group-hover:-translate-y-full">
                         {link.name}
                       </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                      {/* Texto que sobe no Hover */}
+                      <span className="absolute inset-0 block transition-transform duration-300 translate-y-full group-hover:translate-y-0 text-pet-orange font-medium">
+                        {link.name}
+                      </span>
+                    </span>
+                    {/* Seta Deslizante */}
+                    <svg className="w-4 h-4 opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300 text-pet-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+
+          {/* Lado Direito - Contato */}
+          <div className="lg:col-span-4 flex flex-col">
+            <h4 className="text-white font-bold text-xl mb-6 footer-link font-ubuntu">Fale Conosco</h4>
+            <ul className="space-y-4 mb-8">
+              {contactLinks.map((link, idx) => (
+                <li key={idx} className="footer-link">
+                  <a href={link.href} className="group flex items-center gap-3 text-gray-400 hover:text-white transition-colors duration-300 w-fit">
+                    <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-pet-teal group-hover:border-pet-teal transition-all duration-300">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <span className="relative">
+                      {link.name}
+                      <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-pet-teal transition-all duration-300 group-hover:w-full"></span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            {/* Newsletter Minimalista */}
+            <div className="footer-link">
+              <div className="relative w-full max-w-sm">
+                <input 
+                  type="email" 
+                  placeholder="Seu e-mail..." 
+                  className="w-full bg-white/5 border border-white/20 rounded-full py-3 px-6 text-white placeholder:text-gray-500 focus:outline-none focus:border-pet-teal transition-colors"
+                />
+                <button className="absolute right-2 top-2 bottom-2 bg-pet-teal hover:bg-pet-teal-dark text-white rounded-full px-6 font-bold transition-colors shadow-lg text-sm cursor-pointer">
+                  Assinar
+                </button>
+              </div>
             </div>
-          ))}
+          </div>
+          
+        </div>
+        
+        {/* Bathtub Element na Base (opcional se quiser manter) */}
+        <div className="flex justify-center mb-8 relative z-10 footer-link">
+           {/* <Bathtub /> */}
         </div>
 
-        <div className="glass-dark rounded-2xl p-8 mb-12 shadow-premium">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <h4 className="text-2xl font-bold mb-2">📬 Fique por Dentro</h4>
-              <p className="text-gray-300">
-                Receba dicas de cuidado pet, promoções exclusivas e novidades.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <input
-                type="email"
-                placeholder="seu@email.com"
-                className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-pet-orange focus:ring-1 focus:ring-pet-orange transition-all duration-300"
-              />
-              <button className="bg-pet-orange hover:bg-pet-orange-hover text-white font-bold py-3 px-6 rounded-xl shadow-orange-glow transform hover:-translate-y-0.5 transition-all duration-300 whitespace-nowrap">
-                Assinar Newsletter
-              </button>
-            </div>
+        {/* Linha Divisória e Copyright */}
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+          <p className="text-gray-500 text-sm footer-link">
+            &copy; {currentYear} PetCare Premium. Todos os direitos reservados.
+          </p>
+          <div className="flex gap-6 text-sm footer-link">
+            <a href="#" className="text-gray-500 hover:text-white transition-colors">Termos de Uso</a>
+            <a href="#" className="text-gray-500 hover:text-white transition-colors">Política de Privacidade</a>
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 pb-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
-            <p>
-              &copy; {currentYear} Petcare Centro Veterinário. Todos os direitos
-              reservados.
-            </p>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-pet-orange transition-colors">
-                Privacidade
-              </a>
-              <a href="#" className="hover:text-pet-orange transition-colors">
-                Termos
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
     </footer>
   );
