@@ -215,7 +215,7 @@ export default function Prices() {
                   {!isAnnual && <div className="h-6"></div>}
                 </div>
 
-                <div className="w-full h-[1px] bg-linear-to-r from-transparent via-gray-200 to-transparent mb-8"></div>
+                <div className="w-full h-px bg-linear-to-r from-transparent via-gray-200 to-transparent mb-8"></div>
 
                 <ul className="space-y-5 mb-10">
                   {plan.features.map((feature, idx) => (

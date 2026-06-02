@@ -79,7 +79,7 @@ export default function Header() {
             transition={{ duration: 0.4, ease: "easeInOut" }}
             className="fixed top-6 left-0 w-full z-50 flex justify-center px-4"
           >
-            <nav className="w-full max-w-5xl relative glass shadow-premium border border-white/60 py-3 px-6 rounded-[2rem]">
+            <nav className="w-full max-w-5xl relative glass shadow-premium border border-white/60 py-3 px-6 rounded-4xl">
               <div className="flex items-center justify-between">
                 
                 {/* Logo e Nome */}
