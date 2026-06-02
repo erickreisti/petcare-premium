@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito, Fredoka } from "next/font/google";
+import { Nunito, Fredoka, Outfit, Lilita_One } from "next/font/google";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -10,6 +10,17 @@ const nunito = Nunito({
 const fredoka = Fredoka({
   subsets: ["latin"],
   variable: "--font-fredoka",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
+});
+
+const lilita = Lilita_One({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-lilita",
 });
 
 export const metadata: Metadata = {
@@ -36,7 +47,7 @@ export default function RootLayout({
       className="scroll-smooth scroll-pt-17.5 md:scroll-pt-20"
     >
       <body
-        className={`${nunito.variable} ${fredoka.variable} font-work text-[#333] leading-relaxed overflow-x-hidden antialiased selection:bg-pet-orange selection:text-white`}
+        className={`${nunito.variable} ${fredoka.variable} ${outfit.variable} ${lilita.variable} font-work text-[#333] leading-relaxed overflow-x-hidden antialiased selection:bg-pet-orange selection:text-white`}
       >
         {children}
       </body>

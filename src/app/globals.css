@@ -3,14 +3,15 @@
 @theme {
   /* Mapeamento das fontes (mantendo os nomes das classes para compatibilidade) */
   --font-work: var(--font-nunito);
-  --font-ubuntu: var(--font-fredoka);
+  --font-ubuntu: var(--font-lilita);
 
   /* Colors - Design System */
-  --color-pet-teal: #0A3641;
-  --color-pet-teal-light: #135565;
-  --color-pet-orange: #FC7C4B;
-  --color-pet-orange-hover: #FD6E4C;
-  --color-pet-navy: #0B192C;
+  --color-pet-teal: #399d9d;
+  --color-pet-teal-dark: #357e97;
+  --color-pet-orange: #FF9F43;
+  --color-pet-orange-hover: #FF7E67;
+  --color-pet-navy: #1A3B47;
+  --color-pet-bg: #F4FAFA;
 
   /* Sombras Premium / Soft Shadows */
   --shadow-premium: 0 10px 40px -10px rgba(10, 54, 65, 0.1);
@@ -99,6 +100,126 @@
 @layer base {
   button:focus-visible,
   a:focus-visible {
-    @apply outline-2 outline-[#fc7c4b] outline-offset-2;
+    outline: 2px solid #fc7c4b;
+    outline-offset: 2px;
   }
 }
+
+/* SVG Blob Animations para o Header */
+@keyframes rotateBubble {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes morphBubble {
+  0%, 100% {
+    fill: rgba(57, 157, 157, 0.4); /* Teal com transparência */
+    d: path("M46.5,-54.1C60.2,-44,71.1,-29.2,75.4,-12.2C79.7,4.9,77.5,24.2,68.7,39.9C59.9,55.6,44.5,67.7,27.1,73.8C9.7,79.8,-9.7,79.8,-25.8,73C-42,66.2,-54.9,52.7,-64.8,36.8C-74.8,20.9,-81.8,2.6,-80,-15.3C-78.2,-33.1,-67.6,-50.6,-52.8,-60.5C-38,-70.5,-19,-73,-1.3,-71.5C16.4,-69.9,32.9,-64.3,46.5,-54.1Z");
+  }
+  25% {
+    d: path("M49.3,-58.7C64.6,-45.9,78.1,-31,80.7,-14.5C83.2,2,74.9,20.2,64.5,36.5C54.2,52.8,42,67.2,25.4,75.8C8.9,84.4,-11.9,87.1,-30,81.1C-48.1,75.1,-63.4,60.3,-72.3,42.8C-81.1,25.3,-83.5,5.1,-80.2,-14.2C-76.9,-33.6,-68,-52,-53.7,-65C-39.4,-77.9,-19.7,-85.4,-1.4,-83.8C17,-82.2,34,-71.5,49.3,-58.7Z");
+  }
+  50% {
+    fill: rgba(255, 159, 67, 0.4); /* Laranja/Coral com transparência */
+    d: path("M54.1,-64.8C66.7,-53.9,71.2,-33.6,72.7,-14.4C74.3,4.9,72.9,23.1,65,38.2C57.1,53.4,42.7,65.6,25.2,74C7.7,82.5,-12.9,87.2,-30.7,81.8C-48.6,76.5,-63.7,61,-73.7,42.9C-83.7,24.8,-88.7,4.2,-84.2,-13.8C-79.8,-31.7,-65.9,-46.8,-50.3,-57.2C-34.7,-67.7,-17.3,-73.3,1.7,-75.4C20.7,-77.4,41.5,-75.7,54.1,-64.8Z");
+  }
+  75% {
+    d: path("M45.1,-54.7C57.7,-43.1,66.7,-28.3,72.4,-10.6C78.1,7,80.4,27.4,73.2,44.4C65.9,61.5,49.2,75.3,30.2,81.7C11.2,88.1,-10.1,87.2,-26.9,78.9C-43.7,70.6,-56,55.1,-65.5,38.1C-74.9,21.1,-81.5,2.8,-78.3,-13.5C-75,-29.8,-61.9,-44,-47.2,-55.2C-32.6,-66.4,-16.3,-74.6,0,-74.6C16.2,-74.5,32.5,-66.3,45.1,-54.7Z");
+  }
+}
+
+@keyframes morphBubbleShape {
+  0%, 100% {
+    d: path("M46.5,-54.1C60.2,-44,71.1,-29.2,75.4,-12.2C79.7,4.9,77.5,24.2,68.7,39.9C59.9,55.6,44.5,67.7,27.1,73.8C9.7,79.8,-9.7,79.8,-25.8,73C-42,66.2,-54.9,52.7,-64.8,36.8C-74.8,20.9,-81.8,2.6,-80,-15.3C-78.2,-33.1,-67.6,-50.6,-52.8,-60.5C-38,-70.5,-19,-73,-1.3,-71.5C16.4,-69.9,32.9,-64.3,46.5,-54.1Z");
+  }
+  25% {
+    d: path("M49.3,-58.7C64.6,-45.9,78.1,-31,80.7,-14.5C83.2,2,74.9,20.2,64.5,36.5C54.2,52.8,42,67.2,25.4,75.8C8.9,84.4,-11.9,87.1,-30,81.1C-48.1,75.1,-63.4,60.3,-72.3,42.8C-81.1,25.3,-83.5,5.1,-80.2,-14.2C-76.9,-33.6,-68,-52,-53.7,-65C-39.4,-77.9,-19.7,-85.4,-1.4,-83.8C17,-82.2,34,-71.5,49.3,-58.7Z");
+  }
+  50% {
+    d: path("M54.1,-64.8C66.7,-53.9,71.2,-33.6,72.7,-14.4C74.3,4.9,72.9,23.1,65,38.2C57.1,53.4,42.7,65.6,25.2,74C7.7,82.5,-12.9,87.2,-30.7,81.8C-48.6,76.5,-63.7,61,-73.7,42.9C-83.7,24.8,-88.7,4.2,-84.2,-13.8C-79.8,-31.7,-65.9,-46.8,-50.3,-57.2C-34.7,-67.7,-17.3,-73.3,1.7,-75.4C20.7,-77.4,41.5,-75.7,54.1,-64.8Z");
+  }
+  75% {
+    d: path("M45.1,-54.7C57.7,-43.1,66.7,-28.3,72.4,-10.6C78.1,7,80.4,27.4,73.2,44.4C65.9,61.5,49.2,75.3,30.2,81.7C11.2,88.1,-10.1,87.2,-26.9,78.9C-43.7,70.6,-56,55.1,-65.5,38.1C-74.9,21.1,-81.5,2.8,-78.3,-13.5C-75,-29.8,-61.9,-44,-47.2,-55.2C-32.6,-66.4,-16.3,-74.6,0,-74.6C16.2,-74.5,32.5,-66.3,45.1,-54.7Z");
+  }
+}
+
+.blob-bubble {
+  animation: rotateBubble linear 20s infinite;
+}
+
+@keyframes waterJiggle {
+  0% { transform: scale3d(1, 1, 1); }
+  30% { transform: scale3d(1.03, 0.97, 1); }
+  45% { transform: scale3d(0.98, 1.02, 1); }
+  60% { transform: scale3d(1.01, 0.99, 1); }
+  100% { transform: scale3d(1, 1, 1); }
+}
+
+.hover-water-jiggle:hover {
+  animation: waterJiggle 1.2s ease-in-out both;
+}
+.blob-bubble path {
+  animation: morphBubble linear 20s infinite;
+}
+
+/* Magic Grid Button (efeito enviado pelo usuário) */
+.btn-magic {
+  position: relative;
+  overflow: hidden;
+  transition: color .4s ease;
+}
+.btn-magic .btn-content {
+  pointer-events: none;
+  position: relative;
+  z-index: 3;
+}
+.btn-magic .btn-cells {
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-auto-rows: 1fr;
+  overflow: hidden;
+}
+.btn-magic .btn-cells span {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;         
+}
+.btn-magic .btn-cells span:before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: var(--color-pet-teal-dark);
+  background-image: linear-gradient(to right, var(--color-pet-teal-dark), var(--color-pet-teal));
+  transition: transform .4s ease;
+  transform: scale(0);
+  border-radius: 100px;
+  top: 50%;
+  left: 50%;
+  margin-top: -25px;
+  margin-left: -25px;
+}
+.btn-magic .btn-cells span:hover:before {
+  transform: scale(15);
+}
+.btn-magic .btn-cells span:hover ~ span:not(:hover) {
+  pointer-events: none;
+}
+
+/* Animação para o Header flutuante de bolha */
+@keyframes floatHeader {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-float-header {
+  animation: floatHeader 5s ease-in-out infinite;
+}
+
