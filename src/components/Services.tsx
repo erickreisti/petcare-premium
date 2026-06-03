@@ -13,7 +13,7 @@ export default function Services() {
   const services = [
     {
       icon: "🛁",
-      image: "/service_bath_v2.png",
+      image: "/service_bath.png",
       title: "Estética Premium",
       description:
         "Banho, tosa, hidratação e cuidados estéticos com produtos premium e técnicas profissionais.",
@@ -21,7 +21,7 @@ export default function Services() {
     },
     {
       icon: "🏥",
-      image: "/service_vet_v2.png",
+      image: "/service_vet.png",
       title: "Saúde Clínica",
       description:
         "Consultas, exames, vacinas e tratamentos avançados para a saúde do seu pet.",
@@ -29,7 +29,7 @@ export default function Services() {
     },
     {
       icon: "🎾",
-      image: "/service_hotel_v2.png",
+      image: "/service_hotel.png",
       title: "Resort & Creche",
       description:
         "Espaço seguro com monitoramento constante e muita diversão.",
