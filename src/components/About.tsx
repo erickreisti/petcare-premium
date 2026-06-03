@@ -24,25 +24,25 @@ export default function About() {
       step: "01",
       title: "Consulta Inicial",
       description: "Avaliação completa do seu pet",
-      image: "/about_vet_dog.png"
+      image: "/images/about_vet_dog.png"
     },
     {
       step: "02",
       title: "Plano Personalizado",
       description: "Cuidados específicos para suas necessidades",
-      image: "/about_clinic.png"
+      image: "/images/about_clinic.png"
     },
     {
       step: "03",
       title: "Execução Profissional",
       description: "Serviços realizados por especialistas",
-      image: "/about_grooming.png"
+      image: "/images/about_grooming.png"
     },
     {
       step: "04",
       title: "Acompanhamento",
       description: "Monitoramento contínuo da saúde",
-      image: "/about_cat.png"
+      image: "/images/about_cat.png"
     },
   ];
 
@@ -159,24 +159,24 @@ export default function About() {
           <div className="about-gallery grid grid-cols-2 gap-4">
             <div className="space-y-4">
               <div onClick={() => setActiveStep(0)} className={`soap-container aspect-square relative rounded-3xl overflow-hidden shadow-premium group cursor-pointer border-2 transition-all duration-500 ${activeStep === 0 ? "border-pet-teal/40 scale-[1.02]" : "border-transparent"}`}>
-                <Image src="/about_vet_dog.png" alt="Cachorro feliz sendo examinado" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image src="/images/about_vet_dog.png" alt="Cachorro feliz sendo examinado" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                 {/* Camada de Espuma */}
                 <div className={`soap-layer absolute inset-0 glass backdrop-blur-md bg-white/40 flex items-center justify-center transition-all duration-700 pointer-events-none ${openedSteps.includes(0) ? "opacity-0" : "opacity-100 group-hover:opacity-0 group-hover:scale-110"}`}>
                    <span className="text-white drop-shadow-md font-bold tracking-widest uppercase text-sm">Limpar</span>
                 </div>
               </div>
               <div onClick={() => setActiveStep(1)} className={`soap-container aspect-video relative rounded-3xl overflow-hidden shadow-premium group cursor-pointer border-2 transition-all duration-500 ${activeStep === 1 ? "border-pet-teal/40 scale-[1.02]" : "border-transparent"}`}>
-                <Image src="/about_clinic.png" alt="Clínica Veterinária Moderna" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image src="/images/about_clinic.png" alt="Clínica Veterinária Moderna" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className={`soap-layer absolute inset-0 glass backdrop-blur-md bg-white/40 transition-all duration-700 pointer-events-none ${openedSteps.includes(1) ? "opacity-0" : "opacity-100 group-hover:opacity-0 group-hover:scale-110"}`}></div>
               </div>
             </div>
             <div className="space-y-4 pt-8 lg:pt-12">
               <div onClick={() => setActiveStep(3)} className={`soap-container aspect-video relative rounded-3xl overflow-hidden shadow-premium group cursor-pointer border-2 transition-all duration-500 ${activeStep === 3 ? "border-pet-teal/40 scale-[1.02]" : "border-transparent"}`}>
-                <Image src="/about_cat.png" alt="Gato fofo em mesa cirúrgica" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image src="/images/about_cat.png" alt="Gato fofo em mesa cirúrgica" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className={`soap-layer absolute inset-0 glass backdrop-blur-md bg-white/40 transition-all duration-700 pointer-events-none ${openedSteps.includes(3) ? "opacity-0" : "opacity-100 group-hover:opacity-0 group-hover:scale-110"}`}></div>
               </div>
               <div onClick={() => setActiveStep(2)} className={`soap-container aspect-square relative rounded-3xl overflow-hidden shadow-premium group cursor-pointer border-2 transition-all duration-500 ${activeStep === 2 ? "border-pet-teal/40 scale-[1.02]" : "border-transparent"}`}>
-                <Image src="/about_grooming.png" alt="Banho e tosa de pet" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                <Image src="/images/about_grooming.png" alt="Banho e tosa de pet" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className={`soap-layer absolute inset-0 glass backdrop-blur-md bg-white/40 transition-all duration-700 pointer-events-none ${openedSteps.includes(2) ? "opacity-0" : "opacity-100 group-hover:opacity-0 group-hover:scale-110"}`}></div>
               </div>
             </div>
