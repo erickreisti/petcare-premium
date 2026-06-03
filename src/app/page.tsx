@@ -1,11 +1,11 @@
-import Header from "../components/Header";
-import Hero from "../components/Hero";
-import Services from "../components/Services";
-import About from "../components/About";
-import Prices from "../components/Prices";
-import Testimonials from "../components/Testimonials";
-import Footer from "../components/Footer";
-import Bubbles from "../components/Bubbles";
+import Header from "../components/layout/Header";
+import Hero from "../components/sections/Hero";
+import Services from "../components/sections/Services/Services";
+import About from "../components/sections/About/About";
+import Prices from "../components/sections/Prices/Prices";
+import Testimonials from "../components/sections/Testimonials/Testimonials";
+import Footer from "../components/layout/Footer";
+import Bubbles from "../components/ui/Bubbles";
 
 export default function Page() {
   return (
