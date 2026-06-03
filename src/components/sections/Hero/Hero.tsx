@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import ThreeBubble from "./ThreeBubble";
 
 gsap.registerPlugin(useGSAP);
 
@@ -13,33 +12,37 @@ export default function Hero() {
 
   useGSAP(
     () => {
-      // Animações de Entrada (substituindo o Framer Motion)
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      let mm = gsap.matchMedia();
 
-      tl.from(".hero-text > *", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-      })
-        .from(
-          ".hero-image",
-          {
-            scale: 0.9,
-            opacity: 0,
-            duration: 1,
-          },
-          "-=0.6",
-        )
-        .from(
-          ".hero-floating-badge",
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.6,
-          },
-          "-=0.4",
-        );
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        // Animações de Entrada (substituindo o Framer Motion)
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+        tl.from(".hero-text > *", {
+          y: 30,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.15,
+        })
+          .from(
+            ".hero-image",
+            {
+              scale: 0.9,
+              opacity: 0,
+              duration: 1,
+            },
+            "-=0.6",
+          )
+          .from(
+            ".hero-floating-badge",
+            {
+              y: 20,
+              opacity: 0,
+              duration: 0.6,
+            },
+            "-=0.4",
+          );
+      });
     },
     { scope: container },
   );

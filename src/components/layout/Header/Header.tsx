@@ -2,10 +2,6 @@
 
 import { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-
-gsap.registerPlugin(useGSAP);
 
 import { motion, AnimatePresence } from "framer-motion";
 

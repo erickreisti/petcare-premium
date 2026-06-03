@@ -56,29 +56,32 @@ export default function Testimonials() {
   const container = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    // Parallax/Stagger effect on the cards
-    gsap.from(".testimonial-wrapper", {
-      y: 80,
-      opacity: 0,
-      rotationX: 10,
-      duration: 1,
-      stagger: 0.15,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top 75%",
-      }
-    });
+    let mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Parallax/Stagger effect on the cards
+      gsap.from(".testimonial-wrapper", {
+        y: 80,
+        opacity: 0,
+        rotationX: 10,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 75%",
+        }
+      });
 
-    gsap.from(".testimonials-title", {
-      y: -30,
-      opacity: 0,
-      duration: 1,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top 80%",
-      }
+      gsap.from(".testimonials-title", {
+        y: -30,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 80%",
+        }
+      });
     });
   }, { scope: container });
 

@@ -59,74 +59,88 @@ export default function Prices() {
   ];
 
   useGSAP(() => {
-    // Animação de entrada dos cards com efeito 3D sutil
-    gsap.from(".price-card-wrapper", {
-      scrollTrigger: {
-        trigger: ".prices-grid",
-        start: "top 80%",
-      },
-      y: 60,
-      opacity: 0,
-      rotationX: 15,
-      duration: 1,
-      stagger: 0.2,
-      ease: "power3.out",
-    });
+    let mm = gsap.matchMedia();
 
-    // Efeito Confete de Bolhas nos botões
-    const buttons = gsap.utils.toArray<HTMLElement>(".btn-price");
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const rect = btn.getBoundingClientRect();
-        
-        // Criar 20 bolhas de confete premium
-        for(let i=0; i<20; i++) {
-          const bubble = document.createElement('div');
-          bubble.className = "fixed rounded-full pointer-events-none z-50 shadow-glass border border-white/60 backdrop-blur-md";
-          
-          const size = Math.random() * 20 + 8;
-          bubble.style.width = `${size}px`;
-          bubble.style.height = `${size}px`;
-          
-          // Cores Premium
-          const rand = Math.random();
-          if (rand > 0.6) {
-            bubble.style.background = "radial-gradient(circle at 30% 30%, rgba(255, 200, 150, 0.9) 0%, rgba(255, 159, 67, 0.6) 100%)";
-          } else if (rand > 0.3) {
-            bubble.style.background = "radial-gradient(circle at 30% 30%, rgba(180, 240, 240, 0.9) 0%, rgba(57, 157, 157, 0.6) 100%)";
-          } else {
-            bubble.style.background = "rgba(255,255,255,0.9)";
-          }
-          
-          document.body.appendChild(bubble);
-          
-          const startX = rect.left + rect.width / 2;
-          const startY = rect.top + rect.height / 2;
-          
-          gsap.set(bubble, { x: startX, y: startY, opacity: 1, scale: 0 });
-          
-          gsap.to(bubble, {
-            x: startX + (Math.random() - 0.5) * 400,
-            y: startY - Math.random() * 300 - 50,
-            opacity: 0,
-            scale: Math.random() * 1.5 + 0.5,
-            rotation: Math.random() * 360,
-            duration: Math.random() * 1.5 + 0.8,
-            ease: "power3.out",
-            onComplete: () => bubble.remove()
-          });
-        }
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Animação de entrada dos cards com efeito 3D sutil
+      gsap.from(".price-card-wrapper", {
+        scrollTrigger: {
+          trigger: ".prices-grid",
+          start: "top 80%",
+        },
+        y: 60,
+        opacity: 0,
+        rotationX: 15,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
       });
+
+      // Efeito Confete de Bolhas nos botões
+      const buttons = gsap.utils.toArray<HTMLElement>(".btn-price");
+      const cleanups: (() => void)[] = [];
+
+      buttons.forEach((btn) => {
+        const handleClick = () => {
+          const rect = btn.getBoundingClientRect();
+          
+          // Criar 20 bolhas de confete premium
+          for(let i=0; i<20; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = "fixed rounded-full pointer-events-none z-50 shadow-glass border border-white/60 backdrop-blur-md";
+            
+            const size = Math.random() * 20 + 8;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            
+            // Cores Premium
+            const rand = Math.random();
+            if (rand > 0.6) {
+              bubble.style.background = "radial-gradient(circle at 30% 30%, rgba(255, 200, 150, 0.9) 0%, rgba(255, 159, 67, 0.6) 100%)";
+            } else if (rand > 0.3) {
+              bubble.style.background = "radial-gradient(circle at 30% 30%, rgba(180, 240, 240, 0.9) 0%, rgba(57, 157, 157, 0.6) 100%)";
+            } else {
+              bubble.style.background = "rgba(255,255,255,0.9)";
+            }
+            
+            document.body.appendChild(bubble);
+            
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+            
+            gsap.set(bubble, { x: startX, y: startY, opacity: 1, scale: 0 });
+            
+            gsap.to(bubble, {
+              x: startX + (Math.random() - 0.5) * 400,
+              y: startY - Math.random() * 300 - 50,
+              opacity: 0,
+              scale: Math.random() * 1.5 + 0.5,
+              rotation: Math.random() * 360,
+              duration: Math.random() * 1.5 + 0.8,
+              ease: "power3.out",
+              onComplete: () => bubble.remove()
+            });
+          }
+        };
+
+        btn.addEventListener("click", handleClick);
+        cleanups.push(() => btn.removeEventListener("click", handleClick));
+      });
+
+      return () => cleanups.forEach(c => c());
     });
   }, { scope: container });
 
   // Animação de transição dos números usando useEffect para não recriar os listeners
   useGSAP(() => {
-    gsap.fromTo(
-      ".price-number",
-      { opacity: 0, y: -20, scale: 0.9 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.1, ease: "back.out(1.5)" }
-    );
+    let mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      gsap.fromTo(
+        ".price-number",
+        { opacity: 0, y: -20, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.4, stagger: 0.1, ease: "back.out(1.5)" }
+      );
+    });
   }, { dependencies: [isAnnual], scope: container });
 
   return (

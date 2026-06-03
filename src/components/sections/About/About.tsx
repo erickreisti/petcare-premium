@@ -47,30 +47,32 @@ export default function About() {
   ];
 
   useGSAP(() => {
-    // Animação de entrada da seção
-    gsap.from(".about-text", {
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top 80%",
-      },
-      x: -40,
-      opacity: 0,
-      duration: 0.8,
-      ease: "power3.out"
-    });
+    let mm = gsap.matchMedia();
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Animação de entrada da seção
+      gsap.from(".about-text", {
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 80%",
+        },
+        x: -40,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out"
+      });
 
-    gsap.from(".about-gallery", {
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top 80%",
-      },
-      x: 40,
-      opacity: 0,
-      duration: 0.8,
-      ease: "power3.out"
-    });
+      gsap.from(".about-gallery", {
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 80%",
+        },
+        x: 40,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out"
+      });
 
-       // Animação inicial
+      // Animação inicial
       gsap.from(container.current, {
         scrollTrigger: {
           trigger: container.current,
@@ -81,7 +83,7 @@ export default function About() {
         duration: 0.6,
         ease: "power2.out"
       });
-
+    });
   }, { scope: container });
 
   return (

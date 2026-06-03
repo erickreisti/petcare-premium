@@ -39,69 +39,80 @@ export default function Services() {
   ];
 
   useGSAP(() => {
-    // Animação de entrada do cabeçalho
-    gsap.from(".services-header", {
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top 80%",
-      },
-      y: 40,
-      opacity: 0,
-      duration: 0.8,
-      ease: "power3.out"
-    });
+    let mm = gsap.matchMedia();
 
-    // Animação de entrada dos cards e Efeito de Bolhas no Hover
-    const cards = gsap.utils.toArray<HTMLElement>(".service-card");
-    cards.forEach(card => {
-      // Animação individual ao rolar a página
-      gsap.from(card, {
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Animação de entrada do cabeçalho
+      gsap.from(".services-header", {
         scrollTrigger: {
-          trigger: card,
-          start: "top 85%",
+          trigger: container.current,
+          start: "top 80%",
         },
-        y: 60,
+        y: 40,
         opacity: 0,
         duration: 0.8,
         ease: "power3.out"
       });
 
-      card.addEventListener("mouseenter", () => {
-        // Cria 3-5 pequenas bolhas
-        const numBubbles = Math.floor(Math.random() * 3) + 3;
-        
-        for(let i=0; i<numBubbles; i++) {
-          const bubble = document.createElement('div');
-          bubble.className = "absolute rounded-full border border-white/60 pointer-events-none z-0 shadow-sm backdrop-blur-sm";
-          bubble.style.background = "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(57, 157, 157, 0.2) 60%, rgba(255, 255, 255, 0.3) 100%)";
+      // Animação de entrada dos cards e Efeito de Bolhas no Hover
+      const cards = gsap.utils.toArray<HTMLElement>(".service-card");
+      const cleanups: (() => void)[] = [];
+
+      cards.forEach(card => {
+        // Animação individual ao rolar a página
+        gsap.from(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: "top 85%",
+          },
+          y: 60,
+          opacity: 0,
+          duration: 0.8,
+          ease: "power3.out"
+        });
+
+        const handleMouseEnter = () => {
+          // Cria 3-5 pequenas bolhas
+          const numBubbles = Math.floor(Math.random() * 3) + 3;
           
-          // Tamanho aleatório
-          const size = Math.random() * 20 + 10;
-          bubble.style.width = `${size}px`;
-          bubble.style.height = `${size}px`;
-          
-          card.appendChild(bubble);
-          
-          // Animação subindo
-          gsap.fromTo(bubble, 
-            {
-              x: `${Math.random() * 80 + 10}%`,
-              y: "90%",
-              opacity: 0.8,
-              scale: 0.5
-            },
-            {
-              y: "-20%",
-              x: `+=${(Math.random() - 0.5) * 50}`,
-              opacity: 0,
-              scale: 1.2,
-              duration: Math.random() * 1 + 1,
-              ease: "power1.out",
-              onComplete: () => bubble.remove()
-            }
-          );
-        }
+          for(let i=0; i<numBubbles; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = "absolute rounded-full border border-white/60 pointer-events-none z-0 shadow-sm backdrop-blur-sm";
+            bubble.style.background = "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(57, 157, 157, 0.2) 60%, rgba(255, 255, 255, 0.3) 100%)";
+            
+            // Tamanho aleatório
+            const size = Math.random() * 20 + 10;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            
+            card.appendChild(bubble);
+            
+            // Animação subindo
+            gsap.fromTo(bubble, 
+              {
+                x: `${Math.random() * 80 + 10}%`,
+                y: "90%",
+                opacity: 0.8,
+                scale: 0.5
+              },
+              {
+                y: "-20%",
+                x: `+=${(Math.random() - 0.5) * 50}`,
+                opacity: 0,
+                scale: 1.2,
+                duration: Math.random() * 1 + 1,
+                ease: "power1.out",
+                onComplete: () => bubble.remove()
+              }
+            );
+          }
+        };
+
+        card.addEventListener("mouseenter", handleMouseEnter);
+        cleanups.push(() => card.removeEventListener("mouseenter", handleMouseEnter));
       });
+
+      return () => cleanups.forEach(c => c());
     });
 
   }, { scope: container });

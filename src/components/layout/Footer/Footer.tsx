@@ -11,29 +11,33 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   useGSAP(() => {
-    // Reveal text links staggering
-    gsap.from(".footer-link", {
-      y: 20,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top 85%"
-      }
-    });
+    let mm = gsap.matchMedia();
 
-    gsap.from(".footer-social", {
-      scale: 0.5,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.1,
-      ease: "back.out(1.5)",
-      scrollTrigger: {
-        trigger: container.current,
-        start: "top 90%"
-      }
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Reveal text links staggering
+      gsap.from(".footer-link", {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 85%"
+        }
+      });
+
+      gsap.from(".footer-social", {
+        scale: 0.5,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: "back.out(1.5)",
+        scrollTrigger: {
+          trigger: container.current,
+          start: "top 90%"
+        }
+      });
     });
   }, { scope: container });
 
