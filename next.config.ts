@@ -2,6 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  output: "export",
+  basePath: "/petcare-premium",
+  images: {
+    unoptimized: true,
+  },
   reactCompiler: true,
 };
 
