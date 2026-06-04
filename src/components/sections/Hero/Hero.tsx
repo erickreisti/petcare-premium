@@ -33,15 +33,7 @@ export default function Hero() {
             },
             "-=0.6",
           )
-          .from(
-            ".hero-floating-badge",
-            {
-              y: 20,
-              opacity: 0,
-              duration: 0.6,
-            },
-            "-=0.4",
-          );
+          ;
       });
     },
     { scope: container },
