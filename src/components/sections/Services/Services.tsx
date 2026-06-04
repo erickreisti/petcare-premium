@@ -121,14 +121,14 @@ export default function Services() {
     <section
       id="services"
       ref={container}
-      className="py-20 px-6 bg-pet-bg overflow-hidden relative"
+      className="py-16 md:py-20 px-6 bg-pet-bg overflow-hidden relative"
     >
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="services-header text-center mb-16 relative">
           {/* Subtle background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-40 bg-pet-teal/10 blur-[100px] rounded-[100%] pointer-events-none"></div>
           
-          <h2 className="text-4xl md:text-5xl font-bold text-pet-navy mb-6 font-ubuntu leading-tight relative z-10">
+          <h2 className="text-3xl md:text-5xl font-bold text-pet-navy mb-6 font-ubuntu leading-tight relative z-10">
             Cuidado <span className="text-transparent bg-clip-text bg-linear-to-r from-pet-orange to-amber-400 drop-shadow-sm">Completo</span> para seu Pet
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed relative z-10">

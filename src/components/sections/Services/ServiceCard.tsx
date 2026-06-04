@@ -24,13 +24,13 @@ export default function ServiceCard({
         
         <div className="relative z-10">
           <div className="flex items-center gap-4 mb-4">
-            <span className="text-5xl font-black text-transparent bg-clip-text bg-linear-to-br from-pet-teal to-pet-teal/30 font-ubuntu drop-shadow-sm">
+            <span className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-linear-to-br from-pet-teal to-pet-teal/30 font-ubuntu drop-shadow-sm">
               {String(index + 1).padStart(2, '0')}
             </span>
             <div className="h-0.75 w-16 bg-linear-to-r from-pet-orange to-transparent rounded-full opacity-80"></div>
           </div>
           
-          <h3 className="text-4xl md:text-5xl font-bold text-pet-navy font-ubuntu mb-6 tracking-tight">
+          <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold text-pet-navy font-ubuntu mb-6 tracking-tight">
             {service.title}
           </h3>
           <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-xl">
@@ -82,7 +82,7 @@ export default function ServiceCard({
 
       {/* Imagem Flutuante 3D */}
       <div 
-        className={`w-full lg:w-[45%] h-87.5 md:h-100 lg:h-112.5 relative z-20 flex items-center justify-center pointer-events-none ${
+        className={`w-full lg:w-[45%] aspect-square md:aspect-[4/3] lg:aspect-auto lg:h-112.5 relative z-20 flex items-center justify-center pointer-events-none ${
           index % 2 === 1 ? "lg:-mr-12 xl:-mr-16" : "lg:-ml-12 xl:-ml-16"
         }`}
       >

@@ -113,13 +113,13 @@ export default function Hero() {
       </div>
 
       {/* Conteúdo Principal */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 md:py-32 w-full mt-12 lg:mt-0 pointer-events-none">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-32 w-full mt-12 lg:mt-0 pointer-events-none">
         {/* Adicionado pointer-events-none no container principal e auto nos filhos para as bolhas funcionarem */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Texto */}
           <div className="hero-text space-y-8 pointer-events-auto">
             <div>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-pet-navy font-ubuntu">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight text-pet-navy font-ubuntu">
                 Cuidados para a
                 <span className="text-pet-teal-dark relative inline-block mx-3">
                   saúde
@@ -176,10 +176,10 @@ export default function Hero() {
                 { number: "Eco", label: "Produtos Naturais" },
               ].map((stat, index) => (
                 <div key={index} className="text-left md:text-center">
-                  <div className="text-2xl md:text-3xl font-bold text-pet-teal-dark font-ubuntu">
+                  <div className="text-xl md:text-3xl font-bold text-pet-teal-dark font-ubuntu">
                     {stat.number}
                   </div>
-                  <div className="text-gray-500 text-sm font-medium mt-1">
+                  <div className="text-gray-500 text-xs md:text-sm font-medium mt-1">
                     {stat.label}
                   </div>
                 </div>
@@ -188,7 +188,7 @@ export default function Hero() {
           </div>
 
           {/* Imagem do Pet */}
-          <div className="hero-image relative mt-10 lg:mt-0 flex justify-center pointer-events-auto">
+          <div className="hero-image relative mt-12 lg:mt-0 flex justify-center pointer-events-auto">
             <div className="relative z-10 w-full max-w-xl aspect-square flex items-center justify-center">
               {/* Imagem do Cachorro e Bolha de Sabão Integrados (SVG) */}
               <svg

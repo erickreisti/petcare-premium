@@ -94,7 +94,7 @@ export default function About() {
           {/* Subtle background glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-40 bg-pet-teal/10 blur-[100px] rounded-[100%] pointer-events-none"></div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-pet-navy mb-6 font-ubuntu leading-tight relative z-10">
+          <h2 className="text-3xl md:text-5xl font-bold text-pet-navy mb-6 font-ubuntu leading-tight relative z-10">
             Paixão por <span className="text-transparent bg-clip-text bg-linear-to-r from-pet-orange to-amber-400 drop-shadow-sm">Pets</span> desde 2010
           </h2>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed relative z-10">
@@ -108,7 +108,7 @@ export default function About() {
             {/* Left Column: Timeline Cards Stack + Slider */}
             <div className="flex flex-col gap-0 mt-8 lg:mt-0">
               {/* Timeline Cards Stack */}
-              <div className="relative min-h-55 w-full perspective-1000 z-20">
+              <div className="relative min-h-80 md:min-h-55 w-full perspective-1000 z-20">
               {timelineItems.map((item, index) => {
                 const isOpened = openedSteps.includes(index);
                 const isActive = activeStep === index;
@@ -134,7 +134,7 @@ export default function About() {
                         <div className="w-14 h-14 bg-linear-to-br from-pet-orange to-amber-400 text-white rounded-2xl flex items-center justify-center font-black text-xl shadow-lg transform -rotate-3">
                           {item.step}
                         </div>
-                        <h3 className="text-2xl font-bold text-pet-navy font-ubuntu">
+                        <h3 className="text-xl md:text-2xl font-bold text-pet-navy font-ubuntu">
                           {item.title}
                         </h3>
                       </div>

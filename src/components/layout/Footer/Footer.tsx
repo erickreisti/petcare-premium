@@ -126,9 +126,9 @@ export default function Footer() {
 
 
       {/* Conteúdo do Footer (Split Layout Premium) */}
-      <div className="max-w-7xl mx-auto px-6 relative z-10 pt-24 pb-12">
+      <div className="max-w-7xl mx-auto px-6 relative z-10 pt-16 md:pt-24 pb-12">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-start mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-16 lg:gap-12 items-start mb-12 md:mb-20">
           
           {/* Lado Esquerdo - Branding */}
           <div className="lg:col-span-5 flex flex-col">
