@@ -82,7 +82,7 @@ export default function ServiceCard({
 
       {/* Imagem Flutuante 3D */}
       <div 
-        className={`w-full lg:w-[45%] aspect-square md:aspect-[4/3] lg:aspect-auto lg:h-112.5 relative z-20 flex items-center justify-center pointer-events-none ${
+        className={`w-full lg:w-[45%] aspect-square md:aspect-4/3 lg:aspect-auto lg:h-112.5 relative z-20 flex items-center justify-center pointer-events-none ${
           index % 2 === 1 ? "lg:-mr-12 xl:-mr-16" : "lg:-ml-12 xl:-ml-16"
         }`}
       >
