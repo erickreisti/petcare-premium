@@ -230,7 +230,7 @@ export default function Hero() {
                 <g clipPath="url(#blob-clip)">
                   {/* Cachorro Grande, animando dentro do limite estrito da bolha */}
                   <image
-                    href="/images/premium_dog_hero-transparent.png"
+                    href="/petcare-premium/images/premium_dog_hero-transparent.png"
                     x="10"
                     y="10"
                     width="180"
