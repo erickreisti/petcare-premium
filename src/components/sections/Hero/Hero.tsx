@@ -46,8 +46,8 @@ export default function Hero() {
       className="min-h-screen w-full relative flex flex-col items-center justify-center bg-pet-bg overflow-hidden pt-20"
     >
 
-      {/* Redes Sociais - Vidro Embaçado (Flutuante na Esquerda) */}
-      <div className="hidden xl:flex flex-col gap-4 absolute left-8 top-1/2 -translate-y-1/2 z-40 bg-white/30 backdrop-blur-2xl border-2 border-white/60 p-3 rounded-full shadow-[inset_0_0_20px_rgba(255,255,255,0.9),0_15px_30px_rgba(53,126,151,0.15)] opacity-90 hover:opacity-100 transition-opacity duration-300">
+      {/* Redes Sociais - Vidro Embaçado */}
+      <div className="flex flex-row xl:flex-col gap-4 relative xl:absolute xl:left-8 xl:top-1/2 xl:-translate-y-1/2 z-40 bg-white/30 backdrop-blur-2xl border-2 border-white/60 p-3 rounded-full shadow-[inset_0_0_20px_rgba(255,255,255,0.9),0_15px_30px_rgba(53,126,151,0.15)] opacity-90 hover:opacity-100 transition-opacity duration-300 order-2 xl:order-none mt-0 mb-8 xl:my-0 pointer-events-auto scale-90 md:scale-100">
         {/* Instagram */}
         <a
           href="#"
@@ -113,7 +113,7 @@ export default function Hero() {
       </div>
 
       {/* Conteúdo Principal */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-32 w-full mt-12 lg:mt-0 pointer-events-none">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-10 md:py-32 w-full mt-4 lg:mt-0 pointer-events-none order-1 xl:order-none">
         {/* Adicionado pointer-events-none no container principal e auto nos filhos para as bolhas funcionarem */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Texto */}
@@ -279,7 +279,7 @@ export default function Hero() {
       </div>
 
       {/* Social Proof Banner - Pessoas curtindo */}
-      <div className="w-full bg-white/95 backdrop-blur-md py-6 mt-12 border-y border-pet-teal/10 relative z-20 shadow-[0_10px_30px_rgba(53,126,151,0.05)]">
+      <div className="w-full bg-white/95 backdrop-blur-md py-6 mt-4 xl:mt-12 border-y border-pet-teal/10 relative z-20 shadow-[0_10px_30px_rgba(53,126,151,0.05)] order-3 xl:order-none">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-6">
           <div className="flex -space-x-4">
             <img
