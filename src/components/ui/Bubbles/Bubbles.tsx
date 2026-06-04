@@ -102,7 +102,7 @@ export default function Bubbles() {
         <div
           key={i}
           className="bubble-wrapper absolute pointer-events-none"
-          style={{ width: "70px", height: "70px" }}
+          style={{ width: "70px", height: "70px", opacity: 0 }}
         >
           <div
             className="bubble-inner w-full h-full rounded-full border border-white/70 shadow-[inset_0_0_20px_rgba(255,255,255,0.7),0_5px_15px_rgba(53,126,151,0.15)] backdrop-blur-sm pointer-events-none"
