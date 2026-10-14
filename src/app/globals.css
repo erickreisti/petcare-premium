@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Fontes: "inline" porque --font-nunito/--font-lilita nascem no <body> (next/font), não no :root */
+@theme inline {
+  --font-work: var(--font-nunito);
+  --font-ubuntu: var(--font-lilita);
+}
+
 @theme {
   /* Tipografia Fluida (Context-First) com Clamp */
   --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8rem);
@@ -11,16 +17,13 @@
   --text-3xl: clamp(1.5rem, 1.25rem + 1.25vw, 1.875rem);
   --text-4xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.25rem);
   --text-5xl: clamp(2.25rem, 1.75rem + 2.5vw, 3rem);
-  --text-6xl: clamp(2.5rem, 1.8rem + 3.5vw, 3.75rem);
   --text-7xl: clamp(3rem, 2.2rem + 4vw, 4.5rem);
-
-  /* Mapeamento das fontes (mantendo os nomes das classes para compatibilidade) */
-  --font-work: var(--font-nunito);
-  --font-ubuntu: var(--font-lilita);
 
   /* Colors - Design System */
   --color-pet-teal: #399d9d;
-  --color-pet-teal-dark: #357e97;
+  --color-pet-teal-dark: #2d6f86;
+  /* Laranja escurecido só para texto pequeno sobre fundo claro (contraste AA 4.5:1) */
+  --color-pet-orange-text: #a85200;
   --color-pet-orange: #FF9F43;
   --color-pet-orange-hover: #FF7E67;
   --color-pet-navy: #1A3B47;
@@ -28,54 +31,19 @@
 
   /* Sombras Premium / Soft Shadows */
   --shadow-premium: 0 10px 40px -10px rgba(10, 54, 65, 0.1);
-  --shadow-orange-glow: 0 10px 25px -5px rgba(252, 124, 75, 0.4);
+  --shadow-orange-glow: 0 10px 25px -5px rgba(255, 159, 67, 0.4);
   --shadow-teal-glow: 0 10px 25px -5px rgba(10, 54, 65, 0.4);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 75, 99, 0.12), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
 
   /* Animações customizadas */
-  --animate-float: float 6s ease-in-out infinite;
+  --animate-fade-in: fadeIn 0.4s ease-out forwards;
   --animate-fade-in-up: fadeInUp 0.6s ease-out forwards;
-  --animate-fade-in-left: fadeInLeft 1s ease-out forwards;
-  --animate-fade-in-right: fadeInRight 1s ease-out forwards;
 
-  /* Keyframes */
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
+  @keyframes fadeIn {
+    from { opacity: 0; }
   }
   @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  @keyframes fadeInLeft {
-    0% {
-      opacity: 0;
-      transform: translateX(-50px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  @keyframes fadeInRight {
-    0% {
-      opacity: 0;
-      transform: translateX(50px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
   }
 }
 
@@ -83,68 +51,37 @@
 @utility glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 @utility glass-dark {
-  background: rgba(11, 25, 44, 0.85);
+  background: rgba(26, 59, 71, 0.9); /* pet-navy */
   backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Scrollbar Personalizada (Mantida no CSS) */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-::-webkit-scrollbar-thumb {
-  background: #399d9d;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #357e97;
-}
+/* Barra de rolagem */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-pet-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-pet-teal); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-pet-teal-dark); }
 
 /* Foco global de acessibilidade */
 @layer base {
+  /* A Lilita One só tem peso 400: sem isso o font-bold dos títulos vira um negrito falso, borrado */
+  body {
+    font-synthesis-weight: none;
+  }
+
   button:focus-visible,
   a:focus-visible {
-    outline: 2px solid #fc7c4b;
+    outline: 2px solid var(--color-pet-orange);
     outline-offset: 2px;
   }
 }
 
-/* SVG Blob Animations para o Header */
-@keyframes rotateBubble {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes morphBubble {
-  0%, 100% {
-    fill: rgba(57, 157, 157, 0.4); /* Teal com transparência */
-    d: path("M46.5,-54.1C60.2,-44,71.1,-29.2,75.4,-12.2C79.7,4.9,77.5,24.2,68.7,39.9C59.9,55.6,44.5,67.7,27.1,73.8C9.7,79.8,-9.7,79.8,-25.8,73C-42,66.2,-54.9,52.7,-64.8,36.8C-74.8,20.9,-81.8,2.6,-80,-15.3C-78.2,-33.1,-67.6,-50.6,-52.8,-60.5C-38,-70.5,-19,-73,-1.3,-71.5C16.4,-69.9,32.9,-64.3,46.5,-54.1Z");
-  }
-  25% {
-    d: path("M49.3,-58.7C64.6,-45.9,78.1,-31,80.7,-14.5C83.2,2,74.9,20.2,64.5,36.5C54.2,52.8,42,67.2,25.4,75.8C8.9,84.4,-11.9,87.1,-30,81.1C-48.1,75.1,-63.4,60.3,-72.3,42.8C-81.1,25.3,-83.5,5.1,-80.2,-14.2C-76.9,-33.6,-68,-52,-53.7,-65C-39.4,-77.9,-19.7,-85.4,-1.4,-83.8C17,-82.2,34,-71.5,49.3,-58.7Z");
-  }
-  50% {
-    fill: rgba(255, 159, 67, 0.4); /* Laranja/Coral com transparência */
-    d: path("M54.1,-64.8C66.7,-53.9,71.2,-33.6,72.7,-14.4C74.3,4.9,72.9,23.1,65,38.2C57.1,53.4,42.7,65.6,25.2,74C7.7,82.5,-12.9,87.2,-30.7,81.8C-48.6,76.5,-63.7,61,-73.7,42.9C-83.7,24.8,-88.7,4.2,-84.2,-13.8C-79.8,-31.7,-65.9,-46.8,-50.3,-57.2C-34.7,-67.7,-17.3,-73.3,1.7,-75.4C20.7,-77.4,41.5,-75.7,54.1,-64.8Z");
-  }
-  75% {
-    d: path("M45.1,-54.7C57.7,-43.1,66.7,-28.3,72.4,-10.6C78.1,7,80.4,27.4,73.2,44.4C65.9,61.5,49.2,75.3,30.2,81.7C11.2,88.1,-10.1,87.2,-26.9,78.9C-43.7,70.6,-56,55.1,-65.5,38.1C-74.9,21.1,-81.5,2.8,-78.3,-13.5C-75,-29.8,-61.9,-44,-47.2,-55.2C-32.6,-66.4,-16.3,-74.6,0,-74.6C16.2,-74.5,32.5,-66.3,45.1,-54.7Z");
-  }
-}
-
+/* Bolha do Hero: 0% e 100% usam o d do próprio <path> (BLOB em Hero.tsx) */
 @keyframes morphBubbleShape {
-  0%, 100% {
-    d: path("M46.5,-54.1C60.2,-44,71.1,-29.2,75.4,-12.2C79.7,4.9,77.5,24.2,68.7,39.9C59.9,55.6,44.5,67.7,27.1,73.8C9.7,79.8,-9.7,79.8,-25.8,73C-42,66.2,-54.9,52.7,-64.8,36.8C-74.8,20.9,-81.8,2.6,-80,-15.3C-78.2,-33.1,-67.6,-50.6,-52.8,-60.5C-38,-70.5,-19,-73,-1.3,-71.5C16.4,-69.9,32.9,-64.3,46.5,-54.1Z");
-  }
   25% {
     d: path("M49.3,-58.7C64.6,-45.9,78.1,-31,80.7,-14.5C83.2,2,74.9,20.2,64.5,36.5C54.2,52.8,42,67.2,25.4,75.8C8.9,84.4,-11.9,87.1,-30,81.1C-48.1,75.1,-63.4,60.3,-72.3,42.8C-81.1,25.3,-83.5,5.1,-80.2,-14.2C-76.9,-33.6,-68,-52,-53.7,-65C-39.4,-77.9,-19.7,-85.4,-1.4,-83.8C17,-82.2,34,-71.5,49.3,-58.7Z");
   }
@@ -154,86 +91,48 @@
   75% {
     d: path("M45.1,-54.7C57.7,-43.1,66.7,-28.3,72.4,-10.6C78.1,7,80.4,27.4,73.2,44.4C65.9,61.5,49.2,75.3,30.2,81.7C11.2,88.1,-10.1,87.2,-26.9,78.9C-43.7,70.6,-56,55.1,-65.5,38.1C-74.9,21.1,-81.5,2.8,-78.3,-13.5C-75,-29.8,-61.9,-44,-47.2,-55.2C-32.6,-66.4,-16.3,-74.6,0,-74.6C16.2,-74.5,32.5,-66.3,45.1,-54.7Z");
   }
-}
-
-.blob-bubble {
-  animation: rotateBubble linear 20s infinite;
 }
 
 @keyframes waterJiggle {
-  0% { transform: scale3d(1, 1, 1); }
-  30% { transform: scale3d(1.03, 0.97, 1); }
-  45% { transform: scale3d(0.98, 1.02, 1); }
-  60% { transform: scale3d(1.01, 0.99, 1); }
-  100% { transform: scale3d(1, 1, 1); }
+  30% { transform: scale(1.03, 0.97); }
+  45% { transform: scale(0.98, 1.02); }
+  60% { transform: scale(1.01, 0.99); }
 }
 
 .hover-water-jiggle:hover {
   animation: waterJiggle 1.2s ease-in-out both;
 }
-.blob-bubble path {
-  animation: morphBubble linear 20s infinite;
-}
 
-/* Magic Grid Button (efeito enviado pelo usuário) */
-.btn-magic {
-  position: relative;
-  overflow: hidden;
-  transition: color .4s ease;
-}
-.btn-magic .btn-content {
-  pointer-events: none;
-  position: relative;
-  z-index: 3;
-}
-.btn-magic .btn-cells {
+/* Botão com grade de células: a célula sob o mouse cresce um círculo que pinta o botão */
+.btn-cells {
   position: absolute;
+  inset: 0;
   z-index: 2;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-auto-rows: 1fr;
   overflow: hidden;
 }
-.btn-magic .btn-cells span {
-  width: 100%;
-  height: 100%;
-  display: block;
-  position: relative;         
+.btn-cells span {
+  position: relative;
 }
-.btn-magic .btn-cells span:before {
+.btn-cells span::before {
   content: "";
-  display: block;
   position: absolute;
+  inset: 0;
+  margin: auto;
   width: 50px;
   height: 50px;
-  background: var(--color-pet-teal-dark);
-  background-image: linear-gradient(to right, var(--color-pet-teal-dark), var(--color-pet-teal));
-  transition: transform .4s ease;
+  border-radius: 50%;
+  background: linear-gradient(to right, var(--color-pet-teal-dark), var(--color-pet-teal));
   transform: scale(0);
-  border-radius: 100px;
-  top: 50%;
-  left: 50%;
-  margin-top: -25px;
-  margin-left: -25px;
+  transition: transform 0.4s ease;
 }
-.btn-magic .btn-cells span:hover:before {
+.btn-cells span:hover::before {
   transform: scale(15);
 }
-.btn-magic .btn-cells span:hover ~ span:not(:hover) {
+.btn-cells span:hover ~ span:not(:hover) {
   pointer-events: none;
-}
-
-/* Animação para o Header flutuante de bolha */
-@keyframes floatHeader {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-.animate-float-header {
-  animation: floatHeader 5s ease-in-out infinite;
 }
 
 /* Animação da Onda do Footer (Efeito Água) */
@@ -252,35 +151,92 @@
   }
 }
 
-.footer-water-container {
-  position: relative;
-  width: 100%;
-  height: 60px;
-  background-color: var(--color-pet-bg);
-  overflow: hidden;
-  isolation: isolate;
-}
-
-@media (min-width: 768px) {
-  .footer-water-container {
-    height: 90px;
-  }
-}
-
+/* A onda é a "superfície" da seção de cima (pet-bg) invertida: abaixo dela aparece
+   direto o fundo texturizado do footer, sem emenda */
 .footer-water-wave {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  background-color: var(--color-pet-navy);
+  inset: 0;
+  background-color: var(--color-pet-bg);
   animation: footerWaterWave 3s linear infinite;
-  transform-origin: bottom;
+  transform: scaleY(-1);
 }
 
 .footer-water-wave.wave-bg {
-  background-color: var(--color-pet-teal-dark);
-  opacity: 0.4;
-  transform: scaleX(-1);
+  opacity: 0.5;
+  transform: scale(-1, -1);
   animation-delay: 1.5s;
+}
+
+/* Sem estilo inline para respeitar reduced-motion */
+.blob-morph {
+  animation: morphBubbleShape 20s linear infinite;
+}
+
+/* Bolhas que sobem no Footer */
+@keyframes float-up {
+  0% { transform: scale(0.8); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(-1000px) scale(1.2) rotate(360deg); opacity: 0; }
+}
+
+/* Duração e atraso vêm do estilo inline de cada bolha */
+.footer-bubble {
+  animation: float-up linear infinite;
+}
+
+/* Divisória de onda entre seções (WaveDivider) */
+@keyframes waveDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.wave-divider-svg {
+  width: 200%;
+  height: 100%;
+  animation: waveDrift 18s linear infinite;
+}
+
+/* Manchas de cor que dão o que o vidro desfocar */
+@keyframes blobDrift {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(40px, -30px, 0) scale(1.15); }
+}
+.blob-drift {
+  animation: blobDrift 14s ease-in-out infinite alternate;
+}
+
+/* Barra de progresso da etapa ativa na seção Sobre: ao terminar, o autoplay avança */
+@keyframes stepProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.step-progress {
+  transform-origin: left;
+  animation: stepProgress 6s linear forwards;
+}
+
+/* Seções fora da tela (marcadas em DeferredEffects) não gastam quadros com animação */
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Com o Lenis ativo quem anima a rolagem é ele; o smooth nativo brigaria com cada frame */
+html.lenis {
+  scroll-behavior: auto;
+}
+
+/* Respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
 }

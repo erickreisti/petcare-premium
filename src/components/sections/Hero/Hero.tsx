@@ -1,40 +1,157 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
+import { BASE_PATH } from "@/lib/basePath";
+import { socialLinks, SocialIcon } from "@/components/ui/socialLinks";
 import { useRef } from "react";
+import { preload } from "react-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useMagnetic } from "@/lib/useMagnetic";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const stats = [
+  { count: 2, suffix: "K+", label: "Pets Limpinhos" },
+  { count: 100, suffix: "%", label: "Carinho" },
+  { text: "Eco", label: "Produtos Naturais" },
+];
+
+const HERO_IMAGE = `${BASE_PATH}/images/premium_dog_hero-transparent.webp`;
+
+// Forma base da bolha; os outros quadros da animação ficam em globals.css (morphBubbleShape)
+const BLOB =
+  "M46.5,-54.1C60.2,-44,71.1,-29.2,75.4,-12.2C79.7,4.9,77.5,24.2,68.7,39.9C59.9,55.6,44.5,67.7,27.1,73.8C9.7,79.8,-9.7,79.8,-25.8,73C-42,66.2,-54.9,52.7,-64.8,36.8C-74.8,20.9,-81.8,2.6,-80,-15.3C-78.2,-33.1,-67.6,-50.6,-52.8,-60.5C-38,-70.5,-19,-73,-1.3,-71.5C16.4,-69.9,32.9,-64.3,46.5,-54.1Z";
+
+const highlights = [
+  { pos: "top-[18%] left-[24%]", size: "w-6 h-6", bar: "w-12 h-1" },
+  { pos: "bottom-[22%] right-[26%] opacity-80", size: "w-4 h-4", bar: "w-8 h-0.5" },
+];
 
 export default function Hero() {
+  // <image> de SVG não é descoberto cedo pelo navegador: pré-carrega com prioridade alta
+  preload(HERO_IMAGE, { as: "image", fetchPriority: "high" });
+
   const container = useRef<HTMLElement>(null);
+  const primaryCtaRef = useMagnetic<HTMLAnchorElement>();
+  const secondaryCtaRef = useMagnetic<HTMLAnchorElement>(0.25);
 
   useGSAP(
     () => {
-      let mm = gsap.matchMedia();
+      const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // Animações de Entrada (substituindo o Framer Motion)
-        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      mm.add(
+        {
+          motion: "(prefers-reduced-motion: no-preference)",
+          finePointer: "(hover: hover) and (pointer: fine)",
+        },
+        (context) => {
+          const { motion, finePointer } = context.conditions as Record<string, boolean>;
+          if (!motion || !container.current) return;
+          const section = container.current;
 
-        tl.from(".hero-text > *", {
-          y: 30,
-          opacity: 0,
-          duration: 0.8,
-          stagger: 0.15,
-        })
-          .from(
-            ".hero-image",
-            {
-              scale: 0.9,
-              opacity: 0,
-              duration: 1,
-            },
-            "-=0.6",
-          )
-          ;
-      });
+          // Entrada: texto sobe, a bolha "infla" com elástico e o rabisco é desenhado
+          const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+          tl.from(".hero-text > *", {
+            y: 30,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+          })
+            // Sem opacity: a imagem é o LCP e precisa estar visível desde o primeiro quadro
+            .from(
+              ".hero-image",
+              { scale: 0.8, duration: 1.6, ease: "elastic.out(1, 0.55)" },
+              0,
+            )
+            // Rabisco "feito à mão": desenha bem devagar e suave depois que o título assenta,
+            // dá um boing elástico e solta um coraçãozinho na ponta
+            .fromTo(
+              ".hero-underline",
+              { strokeDasharray: 1, strokeDashoffset: 1 },
+              { strokeDashoffset: 0, duration: 4, ease: "power1.inOut" },
+              1,
+            )
+            .fromTo(
+              ".hero-underline-svg",
+              { scaleY: 1 },
+              { keyframes: { scaleY: [1.25, 0.92, 1] }, duration: 1.2, ease: "sine.inOut" },
+              "-=0.15",
+            )
+            .from(
+              ".hero-heart",
+              { scale: 0, rotation: -30, y: 8, opacity: 0, duration: 0.9, ease: "elastic.out(1.2, 0.4)", clearProps: "all" },
+              "<0.1",
+            );
+
+          // Contadores das estatísticas (escreve no próprio nó de texto que o React controla)
+          const counters = gsap.utils.toArray<HTMLElement>(".stat-count");
+          counters.forEach((el) => {
+            const node = el.firstChild;
+            if (!node) return;
+            const counter = { value: 0 };
+            tl.to(
+              counter,
+              {
+                value: Number(el.dataset.value),
+                duration: 1.4,
+                ease: "power2.out",
+                onUpdate: () => {
+                  node.nodeValue = String(Math.round(counter.value));
+                },
+              },
+              0.5,
+            );
+          });
+
+          // Parallax de rolagem: a bolha desce mais devagar que a página
+          gsap.to(".hero-image", {
+            yPercent: 12,
+            ease: "none",
+            scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true },
+          });
+
+          const restoreCounters = () =>
+            counters.forEach((el) => {
+              if (el.firstChild) el.firstChild.nodeValue = el.dataset.value ?? "";
+            });
+
+          const stage = section.querySelector<HTMLElement>(".hero-stage");
+          if (!finePointer || !stage) return restoreCounters;
+
+          // Parallax de mouse: a bolha se afasta levemente e os reflexos seguem a "luz"
+          const quick = (el: Element, prop: "x" | "y") =>
+            gsap.quickTo(el, prop, { duration: 0.8, ease: "power3.out" });
+          const stageX = quick(stage, "x");
+          const stageY = quick(stage, "y");
+          const lights = gsap.utils
+            .toArray<HTMLElement>(".hero-highlight")
+            .map((el, i) => ({ x: quick(el, "x"), y: quick(el, "y"), depth: 28 + i * 14 }));
+
+          const moveTo = (nx: number, ny: number) => {
+            stageX(nx * -16);
+            stageY(ny * -16);
+            lights.forEach((l) => {
+              l.x(nx * l.depth);
+              l.y(ny * l.depth);
+            });
+          };
+          const handlePointerMove = (e: PointerEvent) => {
+            const rect = section.getBoundingClientRect();
+            moveTo((e.clientX - rect.left) / rect.width - 0.5, (e.clientY - rect.top) / rect.height - 0.5);
+          };
+          const handlePointerLeave = () => moveTo(0, 0);
+
+          section.addEventListener("pointermove", handlePointerMove);
+          section.addEventListener("pointerleave", handlePointerLeave);
+          return () => {
+            section.removeEventListener("pointermove", handlePointerMove);
+            section.removeEventListener("pointerleave", handlePointerLeave);
+            restoreCounters();
+          };
+        },
+      );
     },
     { scope: container },
   );
@@ -47,73 +164,23 @@ export default function Hero() {
     >
 
       {/* Redes Sociais - Vidro Embaçado */}
-      <div className="flex flex-row xl:flex-col gap-4 relative xl:absolute xl:left-8 xl:top-1/2 xl:-translate-y-1/2 z-40 bg-white/30 backdrop-blur-2xl border-2 border-white/60 p-3 rounded-full shadow-[inset_0_0_20px_rgba(255,255,255,0.9),0_15px_30px_rgba(53,126,151,0.15)] opacity-90 hover:opacity-100 transition-opacity duration-300 order-2 xl:order-0 mt-0 mb-8 xl:my-0 pointer-events-auto scale-90 md:scale-100">
-        {/* Instagram */}
-        <a
-          href="#"
-          className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50"
-          aria-label="Instagram"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+      <div className="flex flex-row 2xl:flex-col gap-4 relative 2xl:absolute 2xl:left-8 2xl:top-1/2 2xl:-translate-y-1/2 z-40 bg-white/30 backdrop-blur-2xl border-2 border-white/60 p-3 rounded-full shadow-[inset_0_0_20px_rgba(255,255,255,0.9),0_15px_30px_rgba(53,126,151,0.15)] opacity-90 hover:opacity-100 transition-opacity duration-300 order-2 2xl:order-0 mt-0 mb-8 2xl:my-0 pointer-events-auto scale-90 md:scale-100">
+        {socialLinks.map((social) => (
+          <a
+            key={social.name}
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-[background-color,color,translate] duration-300 shadow-sm border border-white/50"
+            aria-label={social.name}
           >
-            <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-          </svg>
-        </a>
-        {/* Facebook */}
-        <a
-          href="#"
-          className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50"
-          aria-label="Facebook"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-          </svg>
-        </a>
-        {/* TikTok */}
-        <a
-          href="#"
-          className="w-12 h-12 rounded-full flex items-center justify-center bg-white/40 text-pet-teal-dark hover:bg-white hover:text-pet-orange hover:-translate-y-1 transition-all duration-300 shadow-sm border border-white/50"
-          aria-label="TikTok"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
-          </svg>
-        </a>
+            <SocialIcon className="w-5.5 h-5.5">{social.icon}</SocialIcon>
+          </a>
+        ))}
       </div>
 
       {/* Conteúdo Principal */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-10 md:py-32 w-full mt-4 lg:mt-0 pointer-events-none order-1 xl:order-0">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-10 md:py-16 lg:py-12 w-full mt-4 lg:mt-0 pointer-events-none order-1 2xl:order-0">
         {/* Adicionado pointer-events-none no container principal e auto nos filhos para as bolhas funcionarem */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Texto */}
@@ -124,18 +191,26 @@ export default function Hero() {
                 <span className="text-pet-teal-dark relative inline-block mx-3">
                   saúde
                   <svg
-                    className="absolute -bottom-1 md:-bottom-2 left-0 w-full text-pet-orange/30"
-                    viewBox="0 0 200 12"
+                    className="hero-underline-svg absolute -bottom-2 md:-bottom-3 left-0 w-full origin-center text-pet-orange/60"
+                    viewBox="0 0 200 16"
                     aria-hidden="true"
                   >
                     <path
-                      d="M0,6 Q100,0 200,6"
+                      className="hero-underline"
+                      pathLength={1}
+                      d="M4,9 C40,4 70,12 100,8 S160,4 196,8"
                       stroke="currentColor"
-                      strokeWidth="4"
+                      strokeWidth="3.5"
                       fill="none"
                       strokeLinecap="round"
                     />
                   </svg>
+                  <span
+                    aria-hidden="true"
+                    className="hero-heart absolute -right-4 -bottom-3 md:-right-5 md:-bottom-4 text-base md:text-xl text-pet-orange rotate-12"
+                  >
+                    ♥
+                  </span>
                 </span>
                 do seu pet
               </h1>
@@ -149,20 +224,19 @@ export default function Hero() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-5 pt-4">
-              <button className="btn-magic group relative bg-pet-teal-dark text-white font-bold text-lg rounded-full transition-colors duration-300 overflow-hidden">
-                <div className="btn-cells">
-                  {[...Array(20)].map((_, i) => (
-                    <span key={i}></span>
-                  ))}
+              <Link ref={primaryCtaRef} href="#contact" className="group relative bg-pet-teal-dark text-white font-bold text-lg rounded-full transition-colors duration-300 overflow-hidden">
+                <div className="btn-cells" aria-hidden="true">
+                  {Array.from({ length: 20 }, (_, i) => <span key={i} />)}
                 </div>
-                <span className="btn-content px-8 py-4 flex items-center justify-center gap-2">
+                <span className="relative z-3 pointer-events-none px-8 py-4 flex items-center justify-center gap-2">
                   Agendar Banho
                 </span>
-              </button>
+              </Link>
 
               <Link
+                ref={secondaryCtaRef}
                 href="#services"
-                className="group glass hover:glass-dark text-pet-navy hover:text-white font-bold text-lg py-4 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-pet-navy/10 hover:border-white/20"
+                className="group glass hover:glass-dark text-pet-navy hover:text-white font-bold text-lg py-4 px-8 rounded-full transition-[background-color,color,border-color,translate,scale] duration-300 hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2 shadow-sm border border-pet-navy/10 hover:border-white/20"
               >
                 Ver Pacotes
               </Link>
@@ -170,14 +244,17 @@ export default function Hero() {
 
             {/* Estatísticas */}
             <div className="grid grid-cols-3 gap-6 pt-8 md:pt-10 border-t border-pet-teal/10">
-              {[
-                { number: "2K+", label: "Pets Limpinhos" },
-                { number: "100%", label: "Carinho" },
-                { number: "Eco", label: "Produtos Naturais" },
-              ].map((stat, index) => (
-                <div key={index} className="text-left md:text-center">
-                  <div className="text-xl md:text-3xl font-bold text-pet-teal-dark font-ubuntu">
-                    {stat.number}
+              {stats.map((stat) => (
+                <div key={stat.label} className="text-left md:text-center">
+                  <div className="text-xl md:text-3xl font-bold text-pet-teal-dark font-ubuntu tabular-nums">
+                    {stat.count !== undefined ? (
+                      <>
+                        <span className="stat-count" data-value={stat.count}>{stat.count}</span>
+                        {stat.suffix}
+                      </>
+                    ) : (
+                      stat.text
+                    )}
                   </div>
                   <div className="text-gray-500 text-xs md:text-sm font-medium mt-1">
                     {stat.label}
@@ -189,119 +266,76 @@ export default function Hero() {
 
           {/* Imagem do Pet */}
           <div className="hero-image relative mt-12 lg:mt-0 flex justify-center pointer-events-auto">
-            <div className="relative z-10 w-full max-w-xl aspect-square flex items-center justify-center">
-              {/* Imagem do Cachorro e Bolha de Sabão Integrados (SVG) */}
+            <div className="hero-stage relative z-10 w-full max-w-xl aspect-square flex items-center justify-center">
+              {/* Cachorro dentro da bolha de sabão; a forma anima via CSS (.blob-morph) */}
               <svg
-                className="absolute w-[120%] h-[120%] z-20 drop-shadow-2xl pointer-events-auto hover-water-jiggle"
+                className="absolute w-[120%] h-[120%] drop-shadow-2xl hover-water-jiggle"
                 viewBox="0 0 200 200"
-                xmlns="http://www.w3.org/2000/svg"
+                role="img"
+                aria-label="Cachorro feliz dentro de uma bolha de sabão"
               >
                 <defs>
-                  {/* Máscara com a forma animada da bolha */}
                   <clipPath id="blob-clip">
-                    <path
-                      transform="translate(100 100)"
-                      style={{
-                        animation: "morphBubbleShape 20s linear infinite",
-                      }}
-                      d="M46.5,-54.1C60.2,-44,71.1,-29.2,75.4,-12.2C79.7,4.9,77.5,24.2,68.7,39.9C59.9,55.6,44.5,67.7,27.1,73.8C9.7,79.8,-9.7,79.8,-25.8,73C-42,66.2,-54.9,52.7,-64.8,36.8C-74.8,20.9,-81.8,2.6,-80,-15.3C-78.2,-33.1,-67.6,-50.6,-52.8,-60.5C-38,-70.5,-19,-73,-1.3,-71.5C16.4,-69.9,32.9,-64.3,46.5,-54.1Z"
-                    />
+                    <path transform="translate(100 100)" className="blob-morph" d={BLOB} />
                   </clipPath>
-
-                  {/* Gradiente Transparente de Bolha de Sabão (Apenas reflexos nas bordas) */}
+                  {/* Vidro de sabão: quase transparente no centro, reflexos coloridos na borda */}
                   <radialGradient id="soapGlassGrad" cx="40%" cy="40%" r="60%">
-                    <stop offset="0%" stopColor="rgba(255, 255, 255, 0.05)" />
-                    <stop offset="70%" stopColor="rgba(200, 240, 255, 0.1)" />
-                    <stop offset="85%" stopColor="rgba(255, 200, 255, 0.2)" />
-                    <stop offset="95%" stopColor="rgba(100, 200, 255, 0.4)" />
-                    <stop offset="100%" stopColor="rgba(255, 255, 255, 0.7)" />
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.1)" />
+                    <stop offset="70%" stopColor="rgba(219,245,255,0.145)" />
+                    <stop offset="85%" stopColor="rgba(255,211,255,0.24)" />
+                    <stop offset="95%" stopColor="rgba(118,206,255,0.43)" />
+                    <stop offset="100%" stopColor="rgba(255,255,255,0.715)" />
                   </radialGradient>
                 </defs>
 
-                {/* Grupo Clipado: A máscara não aumenta de tamanho quando passamos o mouse! */}
+                {/* O clip fica no grupo para a bolha não crescer junto com o zoom do hover */}
                 <g clipPath="url(#blob-clip)">
-                  {/* Cachorro Grande, animando dentro do limite estrito da bolha */}
                   <image
-                    href="/petcare-premium/images/premium_dog_hero-transparent.png"
+                    href={HERO_IMAGE}
                     x="10"
                     y="10"
                     width="180"
                     height="180"
-                    preserveAspectRatio="xMidYMid slice"
-                    style={{
-                      transformOrigin: "center",
-                      transition: "transform 0.7s",
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.transform = "scale(1.05)")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.transform = "scale(1)")
-                    }
+                    className="origin-center transition-transform duration-700 hover:scale-105"
                   />
                 </g>
-
-                {/* Camada Principal da Bolha (Vidro de Sabão Transparente) */}
                 <path
                   transform="translate(100 100)"
-                  style={{
-                    animation: "morphBubbleShape 20s linear infinite",
-                    pointerEvents: "none",
-                  }}
+                  className="blob-morph pointer-events-none"
+                  d={BLOB}
                   fill="url(#soapGlassGrad)"
-                  stroke="rgba(255, 255, 255, 0.8)"
+                  stroke="rgba(255,255,255,0.8)"
                   strokeWidth="1.5"
-                />
-
-                {/* Camada de Brilho Translúcido */}
-                <path
-                  transform="translate(100 100)"
-                  style={{
-                    animation: "morphBubbleShape 20s linear infinite",
-                    pointerEvents: "none",
-                  }}
-                  fill="rgba(255,255,255,0.05)"
                 />
               </svg>
 
-              {/* Reflexo Especular Cruzeta */}
-              <div className="absolute top-[18%] left-[24%] w-6 h-6 bg-white rounded-full blur-[2px] z-30 pointer-events-none flex items-center justify-center">
-                <div className="w-12 h-1 bg-white blur-[1px] transform rotate-45 absolute"></div>
-                <div className="w-1 h-12 bg-white blur-[1px] transform rotate-45 absolute"></div>
-              </div>
-              <div className="absolute bottom-[22%] right-[26%] w-4 h-4 bg-white rounded-full blur-[2px] z-30 pointer-events-none flex items-center justify-center opacity-80">
-                <div className="w-8 h-0.5 bg-white blur-[1px] transform rotate-45 absolute"></div>
-                <div className="w-0.5 h-8 bg-white blur-[1px] transform rotate-45 absolute"></div>
-              </div>
+              {/* Reflexos em cruz que seguem o mouse */}
+              {highlights.map((h) => (
+                <div
+                  key={h.pos}
+                  className={`hero-highlight absolute ${h.pos} ${h.size} bg-white rounded-full blur-[2px] pointer-events-none flex items-center justify-center`}
+                >
+                  <div className={`${h.bar} bg-white blur-[1px] rotate-45 absolute`} />
+                  <div className={`${h.bar} bg-white blur-[1px] -rotate-45 absolute`} />
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
       {/* Social Proof Banner - Pessoas curtindo */}
-      <div className="w-full bg-white/95 backdrop-blur-md py-6 mt-4 xl:mt-12 border-y border-pet-teal/10 relative z-20 shadow-[0_10px_30px_rgba(53,126,151,0.05)] order-3 xl:order-0">
+      <div className="w-full bg-white/95 backdrop-blur-md py-6 mt-4 2xl:mt-12 border-y border-pet-teal/10 relative z-20 shadow-[0_10px_30px_rgba(53,126,151,0.05)] order-3 2xl:order-0">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-6">
-          <div className="flex -space-x-4">
-            <img
-              src="https://i.pravatar.cc/100?img=47"
-              className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover"
-              alt="Perfil"
-            />
-            <img
-              src="https://i.pravatar.cc/100?img=44"
-              className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover"
-              alt="Perfil"
-            />
-            <img
-              src="https://i.pravatar.cc/100?img=33"
-              className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover"
-              alt="Perfil"
-            />
-            <img
-              src="https://i.pravatar.cc/100?img=22"
-              className="w-12 h-12 rounded-full border-2 border-white shadow-md object-cover"
-              alt="Perfil"
-            />
+          <div className="flex -space-x-4" aria-hidden="true">
+            {["🐶", "🐱", "🐰", "🐾"].map((pet, i) => (
+              <div
+                key={i}
+                className="w-12 h-12 rounded-full border-2 border-white shadow-md bg-linear-to-br from-pet-bg to-white flex items-center justify-center text-2xl"
+              >
+                {pet}
+              </div>
+            ))}
             <div className="w-12 h-12 rounded-full border-2 border-white shadow-md bg-pet-teal-dark flex items-center justify-center text-white font-bold text-sm">
               +2k
             </div>

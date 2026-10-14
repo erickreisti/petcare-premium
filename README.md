@@ -8,7 +8,6 @@
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
   [![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white)](https://gsap.com/)
-  [![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
 
 </div>
 
@@ -20,6 +19,8 @@
 - [Funcionalidades](#-funcionalidades)
 - [Tecnologias](#-tecnologias)
 - [Como Executar Localmente](#-como-executar-localmente)
+- [Scripts e Testes](#-scripts-e-testes)
+- [Deploy](#-deploy)
 - [Estrutura de Diretórios](#-estrutura-de-diretórios)
 - [Contribuição](#-contribuição)
 - [Licença](#-licença)
@@ -27,6 +28,8 @@
 ---
 
 ## 🐶 Sobre o Projeto
+
+> ℹ️ **Projeto demonstrativo.** A clínica, os contatos e os depoimentos são fictícios, e os botões de agendamento/assinatura apenas exibem um aviso.
 
 **Petcare Premium** é uma landing page de altíssimo padrão, desenvolvida para clínicas e centros veterinários que buscam transmitir excelência, cuidado e modernidade. O projeto utiliza as tecnologias web mais avançadas de **2026**, garantindo uma experiência de usuário (UX) imersiva, rápida e totalmente otimizada.
 
@@ -37,10 +40,10 @@ O design foi cuidadosamente elaborado com princípios de *Glassmorphism*, *Soft 
 ## 🌟 Funcionalidades
 
 - **Design Premium & Glassmorphism**: Interface ultra-moderna com efeitos de vidro fosco, sombras suaves e tipografia elegante.
-- **Animações de Alto Desempenho**: Integração com **GSAP** e **Framer Motion** para micro-interações, efeitos *reveal* no scroll e *magnetic hover* em botões.
-- **Performance Extrema**: Desenvolvido com **Next.js 16** (App Router) e **React 19**, garantindo tempos de carregamento instantâneos utilizando o React Compiler.
+- **Animações de Alto Desempenho**: Micro-interações e efeitos *reveal* no scroll com **GSAP**, respeitando `prefers-reduced-motion`.
+- **Performance**: **Next.js 16** (App Router) com export estático, **React 19** com React Compiler e imagens em WebP. A foto do hero é pré-carregada com prioridade alta e os efeitos decorativos (rolagem suave, barra de progresso e bolhas) só carregam depois da primeira pintura.
 - **Responsividade Absoluta**: Otimizado para telas de todos os tamanhos (mobile, tablet, desktop) utilizando **Tailwind CSS v4**.
-- **SEO Ready**: Meta tags modernas, OpenGraph e estrutura semântica para indexação perfeita nos motores de busca.
+- **SEO e Acessibilidade**: Meta tags, OpenGraph, sitemap, estrutura semântica e navegação por teclado.
 
 ---
 
@@ -52,7 +55,9 @@ Este projeto foi construído com as melhores ferramentas do ecossistema front-en
 - **Biblioteca UI:** [React 19](https://react.dev/) (com Babel React Compiler)
 - **Estilização:** [Tailwind CSS v4](https://tailwindcss.com/)
 - **Linguagem:** [TypeScript 5](https://www.typescriptlang.org/)
-- **Animações:** [GSAP 3.15](https://gsap.com/) & [Framer Motion 12](https://www.framer.com/motion/)
+- **Animações:** [GSAP 3.15](https://gsap.com/) com `@gsap/react`
+- **Rolagem suave:** [Lenis](https://lenis.darkroom.engineering/)
+- **Testes E2E:** [Playwright](https://playwright.dev/) (desktop e celular)
 
 ---
 
@@ -84,17 +89,51 @@ Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 20 ou superior) i
 
 ---
 
+## 🧪 Scripts e Testes
+
+| Comando | O que faz |
+| --- | --- |
+| `npm run dev` | Servidor de desenvolvimento em `localhost:3000` |
+| `npm run build` | Gera o site estático em `out/` |
+| `npm run check` | Checagem de tipos (`tsc`) e lint (`eslint`) |
+| `npm run e2e` | Smoke tests com Playwright no desktop e no celular (Pixel 7) |
+
+Os testes E2E conferem o título, as seções, a foto do hero, a navegação pelos menus (topo, lateral e mobile), os avisos de demonstração e a ausência de erros no console. Eles usam o `npm run dev` que já estiver rodando ou sobem um. Para testar o build estático, aponte `E2E_BASE_URL` para ele:
+
+```bash
+E2E_BASE_URL=http://localhost:4173/petcare-premium/ npm run e2e
+```
+
+Na primeira vez, instale o navegador do Playwright com `npx playwright install chromium`.
+
+> 💡 Evite rodar `npm run build` com o `npm run dev` aberto: os dois juntos consomem muita memória.
+
+---
+
+## 🌐 Deploy
+
+O site é exportado como estático (`output: "export"`) e publicado no GitHub Pages em `/petcare-premium`. O `basePath` só é aplicado em produção, então em desenvolvimento o site fica na raiz de `localhost:3000`. Caminhos de arquivos em `public/` passam por `BASE_PATH` (`src/lib/basePath.ts`).
+
+---
+
 ## 📁 Estrutura de Diretórios
 
 ```text
 petcare/
-├── public/                 # Assets públicos (imagens, ícones, fontes)
+├── .claude/                # Hooks e skills do Claude Code (proteções e verificação)
+├── e2e/                    # Testes de ponta a ponta (Playwright)
+├── public/                 # Assets públicos (imagens em WebP, ícones)
 ├── src/
-│   ├── app/                # App Router do Next.js (páginas e layouts)
-│   ├── components/         # Componentes reutilizáveis (Header, Footer, seções da Home)
-│   └── lib/                # Funções utilitárias e integrações (se houver)
+│   ├── app/                # App Router do Next.js (layout, página, sitemap)
+│   ├── components/
+│   │   ├── layout/         # Header (menus topo, lateral e mobile) e Footer
+│   │   ├── sections/       # Seções da home (Hero, Serviços, Sobre, Planos, Depoimentos)
+│   │   └── ui/             # Peças reutilizáveis e efeitos (bolhas, rolagem suave, aviso de demo)
+│   └── lib/                # Animações compartilhadas, basePath e aviso de demo
+├── CLAUDE.md               # Regras do projeto para o Claude Code
 ├── eslint.config.mjs       # Configurações do ESLint 9
-├── next.config.ts          # Configurações do Next.js
+├── next.config.ts          # Configurações do Next.js (export estático e basePath)
+├── playwright.config.ts    # Configurações dos testes E2E
 └── package.json            # Dependências e scripts do projeto
 ```
 

@@ -2,132 +2,80 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import ServiceCard from "./ServiceCard";
+import ServiceCard, { type Service } from "./ServiceCard";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
+import { BASE_PATH } from "@/lib/basePath";
+import { bubbleReveal } from "@/lib/motion";
+import WaveDivider from "@/components/ui/WaveDivider";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const services: Service[] = [
+  {
+    image: `${BASE_PATH}/images/service_bath.webp`,
+    title: "Estética Premium",
+    description: "Banho, tosa, hidratação e cuidados estéticos com produtos premium e técnicas profissionais.",
+    features: ["Banho terapêutico", "Tosa higiênica", "Hidratação"],
+  },
+  {
+    image: `${BASE_PATH}/images/service_vet.webp`,
+    title: "Saúde Clínica",
+    description: "Consultas, exames, vacinas e tratamentos avançados para a saúde do seu pet.",
+    features: ["Consultas", "Vacinas", "Exames"],
+  },
+  {
+    image: `${BASE_PATH}/images/service_hotel.webp`,
+    title: "Resort & Creche",
+    description: "Espaço seguro com monitoramento constante e muita diversão.",
+    features: ["Creche", "Hotel Pet", "Recreação"],
+  },
+];
 
 export default function Services() {
   const container = useRef<HTMLElement>(null);
 
-  const services = [
-    {
-      icon: "🛁",
-      image: "/petcare-premium/images/service_bath.png",
-      title: "Estética Premium",
-      description:
-        "Banho, tosa, hidratação e cuidados estéticos com produtos premium e técnicas profissionais.",
-      features: ["Banho terapêutico", "Tosa higiênica", "Hidratação"],
-    },
-    {
-      icon: "🏥",
-      image: "/petcare-premium/images/service_vet.png",
-      title: "Saúde Clínica",
-      description:
-        "Consultas, exames, vacinas e tratamentos avançados para a saúde do seu pet.",
-      features: ["Consultas", "Vacinas", "Exames"],
-    },
-    {
-      icon: "🎾",
-      image: "/petcare-premium/images/service_hotel.png",
-      title: "Resort & Creche",
-      description:
-        "Espaço seguro com monitoramento constante e muita diversão.",
-      features: ["Creche", "Hotel Pet", "Recreação"],
-    },
-  ];
-
   useGSAP(() => {
-    let mm = gsap.matchMedia();
+    const mm = gsap.matchMedia();
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
-      // Animação de entrada do cabeçalho
-      gsap.from(".services-header", {
-        scrollTrigger: {
-          trigger: container.current,
-          start: "top 80%",
-        },
-        y: 40,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out"
-      });
+      bubbleReveal(".services-header h2, .services-header p", container.current);
 
-      // Animação de entrada dos cards e Efeito de Bolhas no Hover
-      const cards = gsap.utils.toArray<HTMLElement>(".service-card");
-      const cleanups: (() => void)[] = [];
+      gsap.utils.toArray<HTMLElement>(".service-card").forEach((card, index) => {
+        const panel = card.querySelector<HTMLElement>(".service-panel");
+        const media = card.querySelector<HTMLElement>(".service-media");
+        if (!panel || !media) return;
+        // Cards alternam de lado, então cada um entra pelo lado em que está
+        const fromLeft = index % 2 === 0;
 
-      cards.forEach(card => {
-        // Animação individual ao rolar a página
-        gsap.from(card, {
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-          },
-          y: 60,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power3.out"
+        gsap
+          .timeline({ scrollTrigger: { trigger: card, start: "top 80%" } })
+          .from(panel, { x: fromLeft ? -60 : 60, opacity: 0, duration: 0.9, ease: "power3.out", clearProps: "all" })
+          .from(
+            media,
+            { scale: 0.7, opacity: 0, rotation: fromLeft ? 6 : -6, duration: 1, ease: "back.out(1.6)" },
+            "-=0.6",
+          );
+
+        // Parallax: a foto flutua um pouco mais rápido que o texto
+        gsap.to(media, {
+          yPercent: -8,
+          ease: "none",
+          scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: true },
         });
-
-        const handleMouseEnter = () => {
-          // Cria 3-5 pequenas bolhas
-          const numBubbles = Math.floor(Math.random() * 3) + 3;
-          
-          for(let i=0; i<numBubbles; i++) {
-            const bubble = document.createElement('div');
-            bubble.className = "absolute rounded-full border border-white/60 pointer-events-none z-0 shadow-sm backdrop-blur-sm";
-            bubble.style.background = "radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(57, 157, 157, 0.2) 60%, rgba(255, 255, 255, 0.3) 100%)";
-            
-            // Tamanho aleatório
-            const size = Math.random() * 20 + 10;
-            bubble.style.width = `${size}px`;
-            bubble.style.height = `${size}px`;
-            
-            card.appendChild(bubble);
-            
-            // Animação subindo
-            gsap.fromTo(bubble, 
-              {
-                x: `${Math.random() * 80 + 10}%`,
-                y: "90%",
-                opacity: 0.8,
-                scale: 0.5
-              },
-              {
-                y: "-20%",
-                x: `+=${(Math.random() - 0.5) * 50}`,
-                opacity: 0,
-                scale: 1.2,
-                duration: Math.random() * 1 + 1,
-                ease: "power1.out",
-                onComplete: () => bubble.remove()
-              }
-            );
-          }
-        };
-
-        card.addEventListener("mouseenter", handleMouseEnter);
-        cleanups.push(() => card.removeEventListener("mouseenter", handleMouseEnter));
       });
-
-      return () => cleanups.forEach(c => c());
     });
-
   }, { scope: container });
 
   return (
     <section
       id="services"
       ref={container}
-      className="py-16 md:py-20 px-6 bg-pet-bg overflow-hidden relative"
+      className="pt-16 md:pt-20 pb-28 md:pb-32 px-6 bg-pet-bg overflow-hidden relative"
     >
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="services-header text-center mb-16 relative">
-          {/* Subtle background glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-40 bg-pet-teal/10 blur-[100px] rounded-[100%] pointer-events-none"></div>
-          
+        <div className="services-header text-center mb-12 relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-40 bg-pet-teal/10 blur-[100px] rounded-[100%] pointer-events-none" />
+
           <h2 className="text-3xl md:text-5xl font-bold text-pet-navy mb-6 font-ubuntu leading-tight relative z-10">
             Cuidado <span className="text-transparent bg-clip-text bg-linear-to-r from-pet-orange to-amber-400 drop-shadow-sm">Completo</span> para seu Pet
           </h2>
@@ -136,13 +84,15 @@ export default function Services() {
           </p>
         </div>
 
-        {/* Horizontal Stack Layout */}
-        <div className="services-grid flex flex-col gap-16 md:gap-24 mt-12">
+        <div className="flex flex-col gap-12 md:gap-16">
           {services.map((service, index) => (
-            <ServiceCard key={index} service={service} index={index} />
+            <ServiceCard key={service.title} service={service} index={index} />
           ))}
         </div>
       </div>
+
+      {/* Onda branca: transição para a seção Sobre Nós */}
+      <WaveDivider className="bottom-0 text-white" />
     </section>
   );
 }
