@@ -1,14 +1,9 @@
 import type { NextConfig } from "next";
-
-// basePath só em produção (GitHub Pages); em dev o site fica em localhost:3000/
-const basePath = process.env.NODE_ENV === "production" ? "/petcare-premium" : "";
+import { BASE_PATH } from "./src/lib/basePath";
 
 const nextConfig: NextConfig = {
   output: "export",
-  basePath,
-  env: {
-    NEXT_PUBLIC_BASE_PATH: basePath,
-  },
+  basePath: BASE_PATH,
   images: {
     unoptimized: true,
   },
