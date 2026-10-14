@@ -4,7 +4,7 @@ export default function TestimonialCard({ testimonial }: { testimonial: { name: 
   const initials = testimonial.name.split(" ").map((word) => word[0]).join("");
 
   return (
-    <div className="h-full perspective-[1000px]">
+    <div className="h-full">
       {/* Sem backdrop-blur: o fundo atrás é liso e são 18 cards se movendo, o desfoque travava o carrossel */}
       <div className="h-full relative bg-white/70 p-8 md:p-10 rounded-[2.5rem] border border-white/80 shadow-premium hover:shadow-[0_20px_50px_rgba(255,159,67,0.15)] transition-[translate,box-shadow] duration-500 hover:-translate-y-2 group overflow-hidden">
         {/* Aspas d'água */}
@@ -15,7 +15,7 @@ export default function TestimonialCard({ testimonial }: { testimonial: { name: 
         <div className="relative z-10 flex flex-col h-full">
           <div className="flex gap-1 mb-6" role="img" aria-label="Nota 5 de 5">
             {Array.from({ length: 5 }, (_, i) => (
-              <svg key={i} aria-hidden="true" className="w-5 h-5 text-amber-400 drop-shadow-sm" fill="currentColor" viewBox="0 0 20 20">
+              <svg key={i} aria-hidden="true" className="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                 <path d={STAR} />
               </svg>
             ))}

@@ -44,7 +44,7 @@ export default function Testimonials() {
 
         // No celular as colunas viram "display: contents" (não aceitam transform), então entram os cards
         gsap.from(desktop ? ".testimonial-column" : ".testimonial-slide", {
-          ...(desktop ? { y: 80, rotationX: 10 } : { x: 60 }),
+          ...(desktop ? { y: 80 } : { x: 60 }),
           opacity: 0,
           duration: 1,
           stagger: desktop ? 0.15 : 0.1,
@@ -124,7 +124,7 @@ export default function Testimonials() {
         >
           {columns.map((column) => (
             <div key={column.duration} className="testimonial-column contents md:block">
-              <div className="testimonial-track contents md:flex md:flex-col">
+              <div className="testimonial-track contents md:flex md:flex-col motion-safe:md:will-change-transform">
                 {column.items.map((testimonial) => (
                   <div key={testimonial.name} className="testimonial-slide shrink-0 w-[85%] sm:w-[60%] snap-start md:w-auto md:pb-8">
                     <TestimonialCard testimonial={testimonial} />
