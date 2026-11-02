@@ -12,9 +12,8 @@ Rode na ordem e **não pare no primeiro erro**: colete tudo para relatar de uma 
    `npm run dev` de `localhost:3000` se já estiver rodando; senão sobe um
    (a primeira compilação demora).
 
-Para testar o build estático (com o basePath `/petcare-premium`), sirva a
-pasta `out` dentro de uma pasta `petcare-premium` e rode com
-`E2E_BASE_URL=http://localhost:<porta>/petcare-premium/`. **Só rode
+Para testar o build estático, sirva a pasta `out` e rode com
+`E2E_BASE_URL=http://localhost:<porta>/`. **Só rode
 `npm run build` se o dev server estiver parado**: os dois juntos estouram a RAM.
 
 ## Relatório

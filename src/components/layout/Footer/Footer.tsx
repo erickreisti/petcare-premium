@@ -216,7 +216,13 @@ export default function Footer() {
           <p className="text-gray-500 text-sm footer-link">
             &copy; {new Date().getFullYear()} PetCare Premium. Todos os direitos reservados.
           </p>
-          <p className="text-gray-500 text-sm footer-link">Projeto demonstrativo &mdash; dados fictícios</p>
+          <p className="text-gray-500 text-sm footer-link">
+            Projeto demonstrativo da{" "}
+            <a href="https://www.insidequantic.com.br" target="_blank" rel="noopener" className="text-gray-300 underline underline-offset-4 hover:text-white transition-colors">
+              Inside Quantic
+            </a>{" "}
+            &mdash; dados fictícios
+          </p>
         </div>
       </div>
     </footer>

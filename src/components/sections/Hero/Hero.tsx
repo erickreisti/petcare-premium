@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { BASE_PATH } from "@/lib/basePath";
 import { socialLinks, SocialIcon } from "@/components/ui/socialLinks";
 import { useRef } from "react";
 import { preload } from "react-dom";
@@ -17,7 +16,7 @@ const stats = [
   { text: "Eco", label: "Produtos Naturais" },
 ];
 
-const HERO_IMAGE = `${BASE_PATH}/images/premium_dog_hero-transparent.webp`;
+const HERO_IMAGE = "/images/premium_dog_hero-transparent.webp";
 
 // Forma base da bolha; os outros quadros da animação ficam em globals.css (morphBubbleShape)
 const BLOB =

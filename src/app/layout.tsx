@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito, Lilita_One } from "next/font/google";
-import { SITE_URL } from "@/lib/basePath";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -16,6 +16,7 @@ const lilita = Lilita_One({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "/" },
   title: "Petcare Premium | Centro Veterinário de Excelência",
   description: "Cuidado veterinário completo, estética premium e hotelzinho com amor e profissionalismo. Agende sua consulta no Petcare.",
   keywords: ["clínica veterinária", "pet shop", "banho e tosa", "veterinário", "hotel pet"],

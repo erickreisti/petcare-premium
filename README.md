@@ -3,6 +3,8 @@
   
   **Uma moderna landing page para um Centro Veterinário de Excelência.**
 
+  [Ver o site no ar](https://petcare-premium-silk.vercel.app)
+
   [![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
   [![React](https://img.shields.io/badge/React-19.2.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
   [![Tailwind CSS](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
@@ -64,7 +66,7 @@ Este projeto foi construído com as melhores ferramentas do ecossistema front-en
 ## 🚀 Como Executar Localmente
 
 ### Pré-requisitos
-Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 20 ou superior) instalado na sua máquina.
+Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 26) instalado na sua máquina.
 
 ### Passos para Instalação
 
@@ -101,7 +103,7 @@ Certifique-se de ter o [Node.js](https://nodejs.org/) (versão 20 ou superior) i
 Os testes E2E conferem o título, as seções, a foto do hero, a navegação pelos menus (topo, lateral e mobile), os avisos de demonstração e a ausência de erros no console. Eles usam o `npm run dev` que já estiver rodando ou sobem um. Para testar o build estático, aponte `E2E_BASE_URL` para ele:
 
 ```bash
-E2E_BASE_URL=http://localhost:4173/petcare-premium/ npm run e2e
+E2E_BASE_URL=http://localhost:4173/ npm run e2e
 ```
 
 Na primeira vez, instale o navegador do Playwright com `npx playwright install chromium`.
@@ -112,7 +114,7 @@ Na primeira vez, instale o navegador do Playwright com `npx playwright install c
 
 ## 🌐 Deploy
 
-O site é exportado como estático (`output: "export"`) e publicado no GitHub Pages em `/petcare-premium`. O `basePath` só é aplicado em produção, então em desenvolvimento o site fica na raiz de `localhost:3000`. Caminhos de arquivos em `public/` passam por `BASE_PATH` (`src/lib/basePath.ts`).
+O site é exportado como estático (`output: "export"`) e publicado na [Vercel](https://petcare-premium-silk.vercel.app), na raiz do domínio, a cada push na `main`. O GitHub Actions confere tipos, lint e o build. O endereço público, usado nos metadados, no sitemap e no `robots.txt`, fica em `src/lib/site.ts`.
 
 ---
 
@@ -124,15 +126,15 @@ petcare/
 ├── e2e/                    # Testes de ponta a ponta (Playwright)
 ├── public/                 # Assets públicos (imagens em WebP, ícones)
 ├── src/
-│   ├── app/                # App Router do Next.js (layout, página, sitemap)
+│   ├── app/                # App Router do Next.js (layout, página, sitemap e robots)
 │   ├── components/
 │   │   ├── layout/         # Header (menus topo, lateral e mobile) e Footer
 │   │   ├── sections/       # Seções da home (Hero, Serviços, Sobre, Planos, Depoimentos)
 │   │   └── ui/             # Peças reutilizáveis e efeitos (bolhas, rolagem suave, aviso de demo)
-│   └── lib/                # Animações compartilhadas, basePath e aviso de demo
+│   └── lib/                # Animações compartilhadas, endereço do site e aviso de demo
 ├── CLAUDE.md               # Regras do projeto para o Claude Code
 ├── eslint.config.mjs       # Configurações do ESLint 9
-├── next.config.ts          # Configurações do Next.js (export estático e basePath)
+├── next.config.ts          # Configurações do Next.js (export estático)
 ├── playwright.config.ts    # Configurações dos testes E2E
 └── package.json            # Dependências e scripts do projeto
 ```
@@ -157,5 +159,5 @@ Este projeto está sob a licença MIT.
 
 ---
 <div align="center">
-  Desenvolvido com 💙 por <a href="https://github.com/erickreisti">Erick</a>
+  Desenvolvido com 💙 pela <a href="https://www.insidequantic.com.br">Inside Quantic</a>
 </div>

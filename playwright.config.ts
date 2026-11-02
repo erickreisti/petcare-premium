@@ -2,7 +2,7 @@ import { defineConfig, devices } from "@playwright/test";
 
 // Smoke de ponta a ponta. Por padrão usa o `next dev` em localhost:3000 (sobe
 // um se não houver). E2E_BASE_URL aponta para outro servidor, por exemplo o
-// build estático em http://localhost:4173/petcare-premium/
+// build estático em http://localhost:4173/
 const baseURL = process.env.E2E_BASE_URL ?? "http://localhost:3000/";
 
 export default defineConfig({

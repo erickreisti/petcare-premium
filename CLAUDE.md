@@ -7,10 +7,12 @@ backend: ações como assinar plano ou newsletter chamam `showDemoNotice`
 - Responda em português (pt-BR). Textos do site também em pt-BR.
 - Stack: Next.js 16 (Turbopack, React Compiler), React 19, Tailwind v4, GSAP
   com `@gsap/react` e Lenis.
-- Export estático (`output: "export"`) publicado no GitHub Pages com basePath
-  `/petcare-premium` só em produção. Caminhos de arquivos em `public/` passam
-  por `BASE_PATH` (`src/lib/basePath.ts`). Imagens não são otimizadas pelo
+- Export estático (`output: "export"`) publicado na Vercel, na raiz do
+  domínio, a cada push na `main` (o CI só confere). Sem basePath: arquivos de
+  `public/` entram com caminho absoluto (`/images/...`). O endereço público
+  fica em `SITE_URL` (`src/lib/site.ts`). Imagens não são otimizadas pelo
   Next: redimensione e converta para webp antes de adicionar.
+- Node 26.x, fixo no `engines` do `package.json` e no CI.
 - Animações respeitam `prefers-reduced-motion` via `gsap.matchMedia()`.
 - Efeitos decorativos (Lenis, barra de progresso, bolhas) carregam depois da
   primeira pintura, em `DeferredEffects`. Não traga eles de volta para o

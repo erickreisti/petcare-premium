@@ -4,7 +4,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ServiceCard, { type Service } from "./ServiceCard";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BASE_PATH } from "@/lib/basePath";
 import { bubbleReveal } from "@/lib/motion";
 import WaveDivider from "@/components/ui/WaveDivider";
 
@@ -12,19 +11,19 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const services: Service[] = [
   {
-    image: `${BASE_PATH}/images/service_bath.webp`,
+    image: "/images/service_bath.webp",
     title: "Estética Premium",
     description: "Banho, tosa, hidratação e cuidados estéticos com produtos premium e técnicas profissionais.",
     features: ["Banho terapêutico", "Tosa higiênica", "Hidratação"],
   },
   {
-    image: `${BASE_PATH}/images/service_vet.webp`,
+    image: "/images/service_vet.webp",
     title: "Saúde Clínica",
     description: "Consultas, exames, vacinas e tratamentos avançados para a saúde do seu pet.",
     features: ["Consultas", "Vacinas", "Exames"],
   },
   {
-    image: `${BASE_PATH}/images/service_hotel.webp`,
+    image: "/images/service_hotel.webp",
     title: "Resort & Creche",
     description: "Espaço seguro com monitoramento constante e muita diversão.",
     features: ["Creche", "Hotel Pet", "Recreação"],

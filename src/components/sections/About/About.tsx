@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import { BASE_PATH } from "@/lib/basePath";
 import { useRef, useState, useCallback, useEffect, useSyncExternalStore } from "react";
 import TestTubeSlider from "./TestTubeSlider";
 import gsap from "gsap";
@@ -27,7 +26,7 @@ const timelineItems = [
     title: "Consulta Inicial",
     description:
       "Conhecemos seu pet com calma: histórico, rotina e um exame clínico completo, feito sem pressa e com muito carinho.",
-    image: `${BASE_PATH}/images/about_vet_dog.webp`,
+    image: "/images/about_vet_dog.webp",
     alt: "Cachorro feliz sendo examinado",
   },
   {
@@ -35,7 +34,7 @@ const timelineItems = [
     title: "Plano Personalizado",
     description:
       "Com base na avaliação, montamos um plano sob medida de vacinas, nutrição e prevenção, pensado para a fase de vida dele.",
-    image: `${BASE_PATH}/images/about_clinic.webp`,
+    image: "/images/about_clinic.webp",
     alt: "Clínica Veterinária Moderna",
   },
   {
@@ -43,7 +42,7 @@ const timelineItems = [
     title: "Execução Profissional",
     description:
       "Veterinários e groomers especializados cuidam de cada etapa, com equipamentos modernos e protocolos de bem-estar.",
-    image: `${BASE_PATH}/images/about_grooming.webp`,
+    image: "/images/about_grooming.webp",
     alt: "Banho e tosa de pet",
   },
   {
@@ -51,7 +50,7 @@ const timelineItems = [
     title: "Acompanhamento",
     description:
       "Depois do atendimento seguimos juntos: lembretes, retornos e um canal direto com a equipe para qualquer dúvida.",
-    image: `${BASE_PATH}/images/about_cat.webp`,
+    image: "/images/about_cat.webp",
     alt: "Gato fofo em mesa cirúrgica",
   },
 ];
